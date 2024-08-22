@@ -1,0 +1,97 @@
+/* ESTILOS PARA EL SCROLL */
+
+body::-webkit-scrollbar{
+    width: 7px;
+    background: black;
+}
+body::-webkit-scrollbar-thumb{
+    background: rgb(5, 12, 71);
+    border-radius: 10px;
+}
+
+/* ESTILOS PARA EL HEADER */
+
+.header{
+    width: 100%;
+    background: rgb(5, 12, 71);
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+}
+.links a{
+    margin: 0px 10px;
+    text-decoration: none;
+    color:  #20d3ee;
+    padding: 5px;
+}
+.links a:hover{
+    border-radius: 50px;
+    background: rgb(103, 101, 101);
+}
+
+/* ESTILOS PARA LAS CARDS Y VISTA */
+
+.cajaCards{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.cards{
+    width: 545px;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    background: rgb(5, 12, 71);
+    border: 2px solid rgb(5, 12, 71);
+    margin-right: 10px;
+}
+.formBuscar input{
+    border: 2px solid rgb(7, 20, 143);
+}
+.formBuscar input::placeholder{
+    color:  #20d3ee;
+}
+
+/* FORMULARIO DE CREACION Y EDICION DE ORDENES */
+
+.formCrearOrden{
+    border: 2px solid rgb(7, 20, 143);
+}
+.formCrearOrden input{
+    border: 2px solid rgb(7, 20, 143);
+}
+.formCrearOrden textarea{
+    border: 2px solid rgb(7, 20, 143);
+}
+.formCrearOrden select{
+    border: 2px solid rgb(7, 20, 143);
+}
+.formCrearOrden input[name="cedula"]::placeholder{
+    color:white;
+}
+.formCrearOrden input[name="orden_cantidad"]::placeholder{
+    color:white;
+}
+.formCrearOrden textarea[name="comentario_adicional"]::placeholder{
+    color:white;
+}
+.formCrearOrden input[type="date"]{
+width: 100%;
+}
+::-webkit-calendar-picker-indicator{
+    background-color: #ffffff;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.formCrearOrden select{
+background: transparent;
+color: white;
+}
+.formCrearOrden option{
+    background-color: black;
+}
+.formCrearOrden #total{
+    border: 2px solid rgb(7, 20, 143);
+}
