@@ -30,11 +30,12 @@ class ordenesController
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
         ->join("clientes_x_direcciones","clientes_x_direcciones.fk_cliente","=","clientes.id_cliente")
         ->join("direcciones","clientes_x_direcciones.fk_direccion","=","direcciones.id_direccion")
+        ->where("orden_estatus","Sin Asignar")
+        ->orWhere("orden_estatus","Asignada")
         ->orderBy("fechaCreacion_orden","desc")
         ->get();
-
+        
         $bolean = TRUE;
-
         return view("ordenesResumen", compact("ordenes","bolean"));
     }
 
@@ -69,7 +70,7 @@ class ordenesController
         }
         else{
             return redirect()->route('ordenes.index')->withErrors([
-                'buscarCodigo' => '¡Esta Orden no existe en el Sistema!'
+                'buscarCodigo' => '¡Esta Orden no existe o ya ha sido Asignada en el Sistema!'
             ]);
         }
         
@@ -87,7 +88,7 @@ class ordenesController
     public function store(Request $request)
     {
         $request->validate([
-            'cedula' => 'required|string|regex:/^[0-9]{2}[0-9]{3}[0-9]{3}$/',
+            'cedula' => 'required|numeric|regex:/^[0-9]{2}[0-9]{3}[0-9]{3}$/',
             'platillo' => 'required|in:Hamburgesa Mixta,Pizza Margarita,Ensalada César,Tacos de Pollo,Sopa de Lentejas',
             'orden_cantidad' => 'required|numeric|min:1',
             'comentario_adicional' => 'required|string',

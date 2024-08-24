@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $vehiculo_descripcion
  * 
  * @property Persona $persona
- * @property Collection|AsigancionesXOrdene[] $asiganciones_x_ordenes
+ * @property Collection|AsignacionesXOrdene[] $asignaciones_x_ordenes
  *
  * @package App\Models
  */
@@ -43,8 +43,8 @@ class Repartidore extends Model
 		return $this->belongsTo(Persona::class, 'fk_persona');
 	}
 
-	public function asiganciones_x_ordenes()
+	public function asignaciones_x_ordenes()
 	{
-		return $this->hasMany(AsigancionesXOrdene::class, 'fk_repartidor');
+		return $this->hasMany(AsignacionesXOrdene::class, 'fk_repartidor');
 	}
 }

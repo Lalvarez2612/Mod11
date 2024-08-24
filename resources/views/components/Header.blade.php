@@ -9,9 +9,9 @@
         <div class="links">
             <a href="{{ route("ordenes.index") }}"><b>Ordenes</b></a>
 
-            <a href="#"><b>Ruta</b></a>
+            <a href="{{ route("rutas.index" )}}"><b>Rutas Asignadas</b></a>
     
-            <a href="#"><b>Entregado</b></a>
+            <a href="#"><b>Entregas</b></a>
         </div>
     </nav>
 

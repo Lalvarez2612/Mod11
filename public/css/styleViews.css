@@ -95,3 +95,36 @@ color: white;
 .formCrearOrden #total{
     border: 2px solid rgb(7, 20, 143);
 }
+
+/* VISTA ASIGNAR ORDEN, ESTILOS DE LA TABLA DE REPARTIDORES */
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse; 
+    background: rgb(5, 12, 71);
+    border-radius: 20px;
+    text-align: center;
+}
+
+.tabla th{
+    border: 3px solid #000; 
+    padding: 10px; 
+}
+.tabla td {
+    border: 3px solid #000; 
+    padding: 10px; 
+}
+
+/* ESTILOS MODAL PARA FINALIZAR RUTA */
+.modalRuta{
+    background: rgb(5, 12, 71);
+}
+.modalRuta .div1Modal{
+    border-bottom: 2px solid black;
+}
+.modalRuta input[name="tiempo_final"]::placeholder{
+    color: #20d3ee;
+}
+.modalRuta input{
+    border: 2px solid black;
+}

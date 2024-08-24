@@ -22,18 +22,17 @@
 
   <div class="w-100 container">
     @if ($bolean == FALSE)
-    <div class="d-flex">
-      <div>
-        <a href="{{route('ordenes.index')}}" class="btn btn-outline-primary my-1" title="Resumen Permisos">
-            <i class='bx bx-arrow-back'></i>
-        </a>
-      </div>
+      <div class="d-flex">
+        <div>
+          <a href="{{route('ordenes.index')}}" class="btn btn-outline-primary" title="Resumen Ordenes">
+              <i class='bx bx-arrow-back'></i>
+          </a>
+        </div>
 
-      <div class="flex-grow-1">
-        <h4 class="text-center text-info mb-5">¡Orden Encontrada con Éxito!</h4>
+        <div class="flex-grow-1">
+          <h4 class="text-center text-info mb-5">¡Orden Encontrada con Éxito!</h4>
+        </div>
       </div>
-    </div>
-
     @else
       <h4 class="text-center text-info mb-5">Resumen de Odenes</h4>
 
@@ -94,20 +93,30 @@
           <p><b class="text-info">Metodo de Pago:</b> {{ $item->nombre_metodo }}</p>
         </div>
         <hr class="text-white">
-  
-        <div class="text-center">
-          <a href="{{ $item->id_orden }}" class="btn btn-success mx-1 my-1" title="Asignar a un Repartidor">
-            <i class='bx bxs-user-plus' ></i>
-          </a>
-          <a href="{{ route("ordenes.edit", $item->id_orden ) }}" 
-              class="btn btn-info mx-1 my-1" title="Editar">
-              <i class='bx bx-edit'></i>
-          </a>
-          <a href="{{ route("ordenes.delete", $item->id_orden ) }}"
-              class="btn btn-danger mx-1" title="Eliminar">
-              <i class='bx bx-trash'></i>
-          </a>
-        </div>
+
+        @if ($item->orden_estatus == "Asignada")
+          <div class="text-center">
+            <a href="{{ route("ordenes.edit", $item->id_orden ) }}" 
+                class="btn btn-outline-info mx-1 my-1" title="Editar">
+                <i class='bx bx-edit'></i>
+            </a>
+          </div>
+        @else
+          <div class="text-center">
+            <a href="{{ route("asignacion.create", $item->id_orden) }}" 
+              class="btn btn-outline-success mx-1 my-1" title="Asignar a un Repartidor">
+              <i class='bx bxs-user-plus' ></i>
+            </a>
+            <a href="{{ route("ordenes.edit", $item->id_orden ) }}" 
+                class="btn btn-outline-info mx-1 my-1" title="Editar">
+                <i class='bx bx-edit'></i>
+            </a>
+            <a href="{{ route("ordenes.delete", $item->id_orden ) }}"
+                class="btn btn-outline-danger mx-1" title="Eliminar">
+                <i class='bx bx-trash'></i>
+            </a>
+          </div> 
+        @endif
       </div>
           
       @endforeach
@@ -144,22 +153,35 @@
           <p><b class="text-info">Metodo de Pago:</b> {{ $ordenes->nombre_metodo }}</p>
         </div>
         <hr class="text-white">
-  
-        <div class="text-center">
-          <a href="{{ $ordenes->id_orden }}" class="btn btn-success mx-1 my-1" title="Asignar a un Repartidor">
-            <i class='bx bxs-user-plus' ></i>
-          </a>
-          <a href="{{ route("ordenes.edit", $ordenes->id_orden ) }}" 
-              class="btn btn-info mx-1 my-1" title="Editar">
-              <i class='bx bx-edit'></i>
-          </a>
-          <a href="{{ route("ordenes.delete", $ordenes->id_orden ) }}"
-              class="btn btn-danger mx-1" title="Eliminar">
-              <i class='bx bx-trash'></i>
-          </a>
-        </div>
-      </div>
-          
+
+        @if ($ordenes->orden_estatus == "Entregada")
+          <div class="text-center text-info">
+            <h4 class="mt-4">¡Esta Orden ya Fue Entregada!</h4>
+          </div> 
+        @elseif($ordenes->orden_estatus == "Asignada")
+          <div class="text-center">
+            <a href="{{ route("ordenes.edit", $ordenes->id_orden ) }}" 
+                class="btn btn-outline-info mx-1 my-1" title="Editar">
+                <i class='bx bx-edit'></i>
+            </a>
+          </div>
+        @else
+          <div class="text-center">
+            <a href="{{ route("asignacion.create", $ordenes->id_orden) }}" 
+              class="btn btn-outline-success mx-1 my-1" title="Asignar a un Repartidor">
+              <i class='bx bxs-user-plus' ></i>
+            </a>
+            <a href="{{ route("ordenes.edit", $ordenes->id_orden ) }}" 
+                class="btn btn-outline-info mx-1 my-1" title="Editar">
+                <i class='bx bx-edit'></i>
+            </a>
+            <a href="{{ route("ordenes.delete", $ordenes->id_orden ) }}"
+                class="btn btn-outline-danger mx-1" title="Eliminar">
+                <i class='bx bx-trash'></i>
+            </a>
+          </div> 
+        @endif
+      </div>  
     @endif
 
   </div>
