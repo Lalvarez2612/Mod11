@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="mb-3 text-start text-info">
-                    <label class="form-label"><b>Código de la Orden a Finalizar su Ruta</b></label>
+                    <label class="form-label"><b>Código de la Orden</b></label>
                     <input type="text" class="form-control bg-transparent text-white"
                     name="tiempo_final" placeholder="O-0000" value="{{ old('tiempo_final') }}">
                 </div>

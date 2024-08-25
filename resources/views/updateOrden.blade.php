@@ -2,14 +2,14 @@
 
 @extends('layouts/layout_general') {{-- AQUI SE INVOCA AL LAYOUT --}}
 
-@section("Módulo Delivery", "Crear Orden")  {{-- AQUI SE DEFINE EL NOMBRE DE LA PAGINA --}}
+@section("Módulo Delivery", "Actualizar una Orden")  {{-- AQUI SE DEFINE EL NOMBRE DE LA PAGINA --}}
 
 
 @section('Contenido') {{-- AQUI SE INDICA LO QUE PONDREMOS DENTRO DEL LAYOUT --}}
 
     {{-- FOMRULARIO PARA CREAR ORDEN--}}
 
-    <form class="container formCrearOrden bg-transparent rounded p-5" action="{{ route("ordenes.update", $updateOrden->id_orden) }}" 
+    <form class="container formCrearOrden bg-transparent rounded mb-5 p-5" action="{{ route("ordenes.update", $updateOrden->id_orden) }}" 
         method="POST">
         @csrf
         @method("PUT")

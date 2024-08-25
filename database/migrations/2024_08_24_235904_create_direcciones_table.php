@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('municipio', 100);
             $table->string('parroquia', 100);
             $table->string('punto_referencia', 500);
+            $table->string('latitud', 100);
+            $table->string('longitud', 100);
         });
     }
 

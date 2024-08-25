@@ -44,7 +44,7 @@ body::-webkit-scrollbar-thumb{
     border-radius: 10px;
     background: rgb(5, 12, 71);
     border: 2px solid rgb(5, 12, 71);
-    margin-right: 10px;
+    margin-right: 15px;
 }
 .formBuscar input{
     border: 2px solid rgb(7, 20, 143);
@@ -127,4 +127,25 @@ color: white;
 }
 .modalRuta input{
     border: 2px solid black;
+}
+
+/* ESTILOS VISTA "calcularRuta" */
+
+.selectRuta select{
+    background: transparent;
+    border: 2px solid rgb(7, 20, 143);
+}
+.selectRuta option{
+    background: black;
+}
+#coord1{
+    border: 2px solid rgb(7, 20, 143);
+}
+#map{
+    border: 2px solid rgb(7, 20, 143);
+}
+
+/* COLORES PARA EL ESTATUS Y TIEMPO TOTAL DE LA ORDEN */
+.estaTime{
+  color: rgb(48, 227, 48);
 }

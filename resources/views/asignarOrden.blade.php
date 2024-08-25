@@ -2,48 +2,32 @@
 
 @extends('layouts/layout_general') {{-- AQUI SE INVOCA AL LAYOUT --}}
 
-@section("Módulo Delivery", "Ordenes Resumen")  {{-- AQUI SE DEFINE EL NOMBRE DE LA PAGINA --}}
+@section("Módulo Delivery", "Asignar Orden")  {{-- AQUI SE DEFINE EL NOMBRE DE LA PAGINA --}}
 
 
 @section('Contenido') {{-- AQUI SE INDICA LO QUE PONDREMOS DENTRO DEL LAYOUT --}}
 
-  {{-- ALERTA CUANDO HAY UN REGISTRO EXITOSO --}}
-  @if ($mensaje = Session::get('success'))
-      <div class="alert alert-info text-center container w-25" role="alert">
-          {{$mensaje}}
-      </div>
-  @endif
-
-  {{-- ALERTA PARA ERRORES DE VALIDACION AL BUSCAR POR CODIGO--}}
-
-  @error('buscarCodigo')
-      <div class="alert alert-danger text-center container w-50">{{ $message }}</div>
-  @enderror
-
-  <div class="d-flex container text-info text-center mb-5">
-    <div>
+  <div class="d-flex justify-content-between align-items-center px-5 mb-3">
+    <div style="margin-right: 20px;">
         <a href="{{route('ordenes.index')}}" class="btn btn-outline-primary my-1" title="Resumen Ordenes">
             <i class='bx bx-arrow-back'></i>
         </a>
     </div>
-
-    <div class="flex-grow-1">
-        <h3>¡Seleciona el Repartidor al que deseas Asignar la Orden!</h3>
+    <div class="w-100 text-center text-info">
+        <h4>¡Seleciona un Repartidor para Crear una Ruta y Asignar la Orden!</h4>
     </div>
   </div>
+  <hr class="text-white mx-3">
 
   {{-- MOSTRAMOS LA ORDEN SELECCIONADA --}}
-
   <div class="d-flex align-items-center flex-column w-100 px-5">
-
-    <div class="cards d-flex align-items-center flex-column text-info w-25">
+    <div class="text-center text-info">
         <h5>Orden Seleccionada: <b class="text-danger">{{ $ordenAsignar->orden_codigo }}</b></h5>
-        <h5>Título: <b class="text-danger">{{ $ordenAsignar->nombre_menu }}</b></h5>
+        <h5>Platillo: <b class="text-danger">{{ $ordenAsignar->nombre_menu }}</b></h5>
     </div>
 
     {{-- MOSTRAMOS LOS REPARTIDORES DISPONIBLES --}}
-
-    <div class="w-100 mt-5 mx-2">
+    <div class="w-100 mt-3 mx-2">
         <table class="tabla">
             <thead class="text-danger">
                 <tr>
@@ -52,7 +36,7 @@
                     <th>Género</th>
                     <th>Estatus</th>
                     <th>Descripción del Vehículo</th>
-                    <th>Asignar</th>
+                    <th>Crear Ruta</th>
                 </tr>
             </thead>
             <tbody class="text-info">
@@ -64,11 +48,9 @@
                         <td>{{ $item->estatus_repartidor }}</td>
                         <td>{{ $item->vehiculo_descripcion }}</td>
                         <td>
-                            <a href="{{route("asignacion.store", 
-                                ['id_repartidor' => $item->id_repartidor, 
-                                'id_orden' => $ordenAsignar->id_orden])}}" 
-                                class="btn btn btn-outline-info" title="Asignar">
-                                <i class='bx bxs-user-check' ></i>
+                            <a href="{{route("asignacion.crearRuta", ['id_repartidor' => $item->id_repartidor, 'id_orden' => $ordenAsignar->id_orden])}}" 
+                                class="btn btn btn-outline-info" title="Crear Ruta">
+                                <i class='bx bxs-location-plus'></i>
                             </a>
                         </td>
                     </tr>

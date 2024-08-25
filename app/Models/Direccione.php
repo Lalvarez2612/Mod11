@@ -18,8 +18,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $municipio
  * @property string $parroquia
  * @property string $punto_referencia
+ * @property string $latitud
+ * @property string $longitud
  * 
  * @property Collection|Cliente[] $clientes
+ * @property Collection|Ruta[] $rutas
  *
  * @package App\Models
  */
@@ -34,12 +37,19 @@ class Direccione extends Model
 		'ciudad',
 		'municipio',
 		'parroquia',
-		'punto_referencia'
+		'punto_referencia',
+		'latitud',
+		'longitud'
 	];
 
 	public function clientes()
 	{
 		return $this->belongsToMany(Cliente::class, 'clientes_x_direcciones', 'fk_direccion', 'fk_cliente')
 					->withPivot('id_clientDirec');
+	}
+
+	public function rutas()
+	{
+		return $this->hasMany(Ruta::class, 'fk_direccion');
 	}
 }

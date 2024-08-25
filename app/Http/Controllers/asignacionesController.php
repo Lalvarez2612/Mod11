@@ -6,22 +6,26 @@ use App\Models\AsignacionesXOrdene;
 use Illuminate\Http\Request;
 use App\Models\Ordene;
 use App\Models\Repartidore;
+use App\Models\Direccione;
+use App\Models\Ruta;
 
 class asignacionesController
 {
     public function index()
     {
         // CONSULTA PARA MOSTRAR LAS ORDENES ASIGNADAS JUNTO A LA RUTA DEL REPARTIDOR
-        $rutaRepartidor = Repartidore::select("orden_codigo","cedula","vehiculo_descripcion",
-                                              "tiempo_inicio","tiempo_final","fecha_asignacion")
+        $rutaRepartidor = Repartidore::select(
+            "orden_codigo","cedula","vehiculo_descripcion",
+            "tiempo_inicio","tiempo_final","fecha_asignacion",
+            "id_ruta",
+        )
         ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido",)
-        ->join("asignaciones_x_ordenes","asignaciones_x_ordenes.fk_repartidor","=","repartidores.id_repartidor")
         ->selectRaw("CONCAT(estado,', ',ciudad,', ',municipio,', ',parroquia,', ',punto_referencia) AS direccion")
-        ->join("personas","personas.id_persona","=","repartidores.fk_persona")
+        ->join("asignaciones_x_ordenes","asignaciones_x_ordenes.fk_repartidor","=","repartidores.id_repartidor")
         ->join("ordenes","ordenes.id_orden","=","asignaciones_x_ordenes.fk_orden")
-        ->join("clientes","clientes.id_cliente","=","ordenes.fk_cliente")
-        ->join("clientes_x_direcciones","clientes_x_direcciones.fk_cliente","=","clientes.id_cliente")
-        ->join("direcciones","clientes_x_direcciones.fk_direccion","=","direcciones.id_direccion")
+        ->join("rutas", "rutas.fk_orden", "=", "ordenes.id_orden")
+        ->join("direcciones", "direcciones.id_direccion", "=", "rutas.fk_direccion")
+        ->join("personas","personas.id_persona","=","repartidores.fk_persona")
         ->orderBy("fecha_asignacion","desc")
         ->get();
 
@@ -42,7 +46,7 @@ class asignacionesController
 
         $repartidores = Repartidore::select("id_repartidor","cedula","genero",
                                             "estatus_repartidor","vehiculo_descripcion")
-        ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido",)
+        ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido")
         ->join("personas","personas.id_persona","=","repartidores.fk_persona")
         ->where("estatus_repartidor","Disponible")
         ->get();
@@ -51,28 +55,75 @@ class asignacionesController
         return view("asignarOrden", compact("ordenAsignar","repartidores"));
     }
 
-    public function store($id_orden,$id_repartidor)
+    // VISTA PARA CREAR LA RUTA VISUALIZANDO EL MAPA
+    public function crearRuta($id_orden,$id_repartidor)
     {
-        // INVOCAR MODELO PARA NUEVO REGISTRO
+        $ordenRuta= Ordene::select("orden_codigo")
+        ->where("id_orden",$id_orden)
+        ->first();
 
-        $asignRepart = new AsignacionesXOrdene;
-        $asignRepart->fk_repartidor = $id_repartidor;
-        $asignRepart->fk_orden = $id_orden;
-        $asignRepart->tiempo_inicio = now()->setTimezone('America/Caracas')->format('H:i:s');
-        $asignRepart->tiempo_final = NULL;
-        $asignRepart->fecha_asignacion = now()->setTimezone('America/Caracas')->format('Y-m-d');;
-        $asignRepart->save();
+        $bolean = TRUE;
+        return view("calcularRuta",compact("id_orden","id_repartidor","ordenRuta","bolean"));;
+    }
 
-        if($asignRepart->save()){
-            // INVOCAR AL MODELO DE ORDENES PARA ACTUALIZAR EL CAMPOR "orden_estatus" A "Asignado"
-            $updateOrden = Ordene::find($id_orden);
-            $updateOrden->orden_estatus = "Asignada";
-            $updateOrden->save();
+    // LOGICA PARA GUARDAR LA RUTA Y ASIGNAR LA ORDEN
+    public function store(Request $request,$id_orden,$id_repartidor) 
+    {
+        $datosSelect = $request->post("punto_entrega");
 
-            return redirect()->route('rutas.index')->with("success", "¡Orden Asignada con Éxito!");
+        if($datosSelect == "10.4866465,-66.9424115" || $datosSelect == "10.5,-66.9192749" || $datosSelect == "10.5066887,-66.8519878"){
+            // CAPTURAR EL ID DE LA DIRECCION CON LAS COORDENADAS
+            $id_dereccion = Direccione::select("id_direccion")
+            ->whereRaw("CONCAT(latitud, ',', longitud) = ?", [$datosSelect])
+            ->first();
+
+            // INVOCAR MODELO PARA CREAR UN REGISTRO EN AL TABLA "rutas"
+            $ruta = new Ruta;
+            $ruta->fk_orden = $id_orden;
+            $ruta->fk_direccion = $id_dereccion->id_direccion;
+            $ruta->save();
+            
+            if($ruta->save()){
+                // INVOCAR MODELO PARA NUEVO REGISTRO EN LA TABLA "asignaciones_x_ordenes"
+                $asignRepart = new AsignacionesXOrdene;
+                $asignRepart->fk_repartidor = $id_repartidor;
+                $asignRepart->fk_orden = $id_orden;
+                $asignRepart->tiempo_inicio = now()->setTimezone('America/Caracas')->format('H:i:s');
+                $asignRepart->tiempo_final = NULL;
+                $asignRepart->fecha_asignacion = now()->setTimezone('America/Caracas')->format('Y-m-d');;
+                $asignRepart->save();
+                
+                if($asignRepart->save()){
+                    // INVOCAR AL MODELO DE ORDENES PARA ACTUALIZAR EL CAMPOR "orden_estatus" A "Asignado"
+                    $updateOrden = Ordene::find($id_orden);
+                    $updateOrden->orden_estatus = "Asignada";
+                    $updateOrden->save();
+                    return redirect()->route('rutas.index')->with("success", "¡Orden Asignada con Éxito!");
+                }
+            }
+        }
+        else{
+            return redirect()->back()->withErrors([
+                'punto_entrega' => '¡Seleccione una Dirección!'
+            ]);
         }
     }
 
+    // LOGICA PARA VER UNA RUTA EN ESPECIFICO
+    public function findRuta($id_ruta)
+    {
+        $rutaBuscar = Ruta::select("id_ruta","orden_codigo")
+        ->selectRaw("CONCAT(latitud,',',longitud) AS coordenadas_ruta")
+        ->join("direcciones","rutas.fk_direccion","=","direcciones.id_direccion")
+        ->join("ordenes","rutas.fk_orden","=","ordenes.id_orden")
+        ->where("id_ruta",$id_ruta)
+        ->first();
+
+        $bolean = FALSE;
+        return view("calcularRuta",compact("rutaBuscar","bolean"));
+    }
+
+    // LOGICA PARA FINALIZAR LA ORDEN
     public function show(Request $request)
     {
         $request->validate([
@@ -90,7 +141,7 @@ class asignacionesController
 
         if($IdsOrdens !== NULL){
             
-            // VALIDAR QUE NO FINALIZEN MAS DE UNA VE UNA RUTA Y ORDEN
+            // VALIDAR QUE NO FINALIZEN MAS DE UNA VEZ UNA RUTA Y ORDEN
             $rutaFin = Ordene::select("orden_estatus")
             ->where("id_orden",$IdsOrdens->id_orden)
             ->where("orden_estatus","Asignada")
@@ -108,7 +159,7 @@ class asignacionesController
                     $ordenLista->orden_estatus = "Entregada";
                     $ordenLista->save();
                     
-                    return redirect()->route('rutas.index')->with("success", "¡Orden Finalizada con Éxito, Búscala en la Sección de Entregas !");
+                    return redirect()->route('rutas.index')->with("success", "¡Orden Finalizada con Éxito, Búscala en la Sección de Entregas!");
                 }
             }
             else{
@@ -119,7 +170,7 @@ class asignacionesController
         }
         else{
             return redirect()->route('rutas.index')->withErrors([
-                'tiempo_final' => '¡Está Orden no existe en el Sistema!'
+                'tiempo_final' => '¡Está Orden no Existe o aún no se le Asigna un Repartidor en el Sistema!'
             ]);
         }
     }
@@ -134,26 +185,29 @@ class asignacionesController
 
             if (preg_match('/^O-\d{4}$/', $codigOrde) || preg_match('/^\d{4}\-\d{2}\-\d{2}$/', $fechaAsignacion )){
 
-                $rutaRepartidor = Repartidore::select("orden_codigo","cedula","vehiculo_descripcion",
-                                "tiempo_inicio","tiempo_final","fecha_asignacion")
+                $rutaRepartidor = Repartidore::select(
+                    "orden_codigo","cedula","vehiculo_descripcion",
+                    "tiempo_inicio","tiempo_final","fecha_asignacion",
+                    "id_ruta",
+                )
                 ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido",)
-                ->join("asignaciones_x_ordenes","asignaciones_x_ordenes.fk_repartidor","=","repartidores.id_repartidor")
                 ->selectRaw("CONCAT(estado,', ',ciudad,', ',municipio,', ',parroquia,', ',punto_referencia) AS direccion")
-                ->join("personas","personas.id_persona","=","repartidores.fk_persona")
+                ->join("asignaciones_x_ordenes","asignaciones_x_ordenes.fk_repartidor","=","repartidores.id_repartidor")
                 ->join("ordenes","ordenes.id_orden","=","asignaciones_x_ordenes.fk_orden")
-                ->join("clientes","clientes.id_cliente","=","ordenes.fk_cliente")
-                ->join("clientes_x_direcciones","clientes_x_direcciones.fk_cliente","=","clientes.id_cliente")
-                ->join("direcciones","clientes_x_direcciones.fk_direccion","=","direcciones.id_direccion")
+                ->join("rutas", "rutas.fk_orden", "=", "ordenes.id_orden")
+                ->join("direcciones", "direcciones.id_direccion", "=", "rutas.fk_direccion")
+                ->join("personas","personas.id_persona","=","repartidores.fk_persona")
+                ->orderBy("fecha_asignacion","desc")
                 ->where("orden_codigo",$codigOrde)
                 ->orwhere("fecha_asignacion",$fechaAsignacion)
                 ->get();
-
+                
                 if($rutaRepartidor->isNotEmpty()){
                     $bolean = FALSE;
                     return view("rutasAsignadas",compact("rutaRepartidor","bolean"));
                 }else{
                     return redirect()->route('rutas.index')->withErrors([
-                        'buscarCodigo' => '¡Está Orden no ha sido Asignada o Creada en el Sistema!'
+                        'buscarCodigo' => '¡No se Encontraron Ordenes Asignas con el Código ni con la Fecha Indicadas!'
                     ]);
                 }
             }

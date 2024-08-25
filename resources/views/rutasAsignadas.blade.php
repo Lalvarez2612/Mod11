@@ -2,7 +2,7 @@
 
 @extends('layouts/layout_general') {{-- AQUI SE INVOCA AL LAYOUT --}}
 
-@section("Módulo Delivery", "Ordenes Resumen")  {{-- AQUI SE DEFINE EL NOMBRE DE LA PAGINA --}}
+@section("Módulo Delivery", "Rutas Asignadas")  {{-- AQUI SE DEFINE EL NOMBRE DE LA PAGINA --}}
 
 
 @section('Contenido') {{-- AQUI SE INDICA LO QUE PONDREMOS DENTRO DEL LAYOUT --}}
@@ -72,6 +72,7 @@
                   <th>Fecha de Asignación</th>
                   <th>Inicio de la Ruta</th>
                   <th>Fin de la Ruta</th>
+                  <th>Ver Ruta</th>
               </tr>
           </thead>
           <tbody class="text-info">
@@ -90,6 +91,11 @@
                   @else
                     <td>{{ \Carbon\Carbon::parse($item->tiempo_final)->format('h:i A') }}</td>
                   @endif
+                  <td>
+                    <a href="{{route("asignacion.findRuta",$item->id_ruta)}}" class="btn btn-outline-info" title="Ver Ruta">
+                      <i class='bx bx-current-location'></i>
+                    </a>
+                  </td>
                 </tr>
               @endforeach
             @else
@@ -107,6 +113,11 @@
                   @else
                     <td>{{ \Carbon\Carbon::parse($item->tiempo_final)->format('h:i A') }}</td>
                   @endif
+                  <td>
+                    <a href="{{route("asignacion.findRuta",$item->id_ruta)}}" class="btn btn-outline-info" title="Ver Ruta">
+                      <i class='bx bx-current-location'></i>
+                    </a>
+                  </td>
                 </tr>
               @endforeach
             @endif

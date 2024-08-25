@@ -19,6 +19,8 @@ class ordenesController
 
     public function index()
     {
+        $bolean = TRUE;
+        $tiempoEntrega ="";
         $ordenes = Ordene::select("id_orden","orden_codigo","nombre_menu","descripcion_menu","orden_estatus",
                                   "comentario_adicional","orden_cantidad","fechaCreacion_orden",
                                   "cedula","telefono","nombre_metodo")
@@ -34,9 +36,8 @@ class ordenesController
         ->orWhere("orden_estatus","Asignada")
         ->orderBy("fechaCreacion_orden","desc")
         ->get();
-        
-        $bolean = TRUE;
-        return view("ordenesResumen", compact("ordenes","bolean"));
+
+        return view("ordenesResumen", compact("ordenes","tiempoEntrega","bolean"));
     }
 
     // ENCONTRAR UNA ORDEN POR CODIGO
@@ -47,8 +48,8 @@ class ordenesController
             "buscarCodigo" => "required|regex:/^O-\d{4}$/"
         ]);
 
+        $bolean = FALSE;
         $codigo = $request->post("buscarCodigo");
-
         $ordenes = Ordene::select("id_orden","orden_codigo","nombre_menu","descripcion_menu","orden_estatus",
                                   "comentario_adicional","orden_cantidad","fechaCreacion_orden",
                                   "cedula","telefono","nombre_metodo")
@@ -61,30 +62,31 @@ class ordenesController
         ->join("clientes_x_direcciones","clientes_x_direcciones.fk_cliente","=","clientes.id_cliente")
         ->join("direcciones","clientes_x_direcciones.fk_direccion","=","direcciones.id_direccion")
         ->where("orden_codigo","=",$codigo)
+        ->get();
+
+        // CONSULTAR EL TIEMPO TOTAL EN CASO DE QUE LA ORDE HAYA SIDO ENTREGADA
+        $tiempoEntrega = Ordene::selectRaw("SEC_TO_TIME(ABS(TIME_TO_SEC(TIMEDIFF(tiempo_inicio, tiempo_final)))) as tiempo_total")
+        ->join("asignaciones_x_ordenes","asignaciones_x_ordenes.fk_orden","=","ordenes.id_orden")
+        ->where("orden_codigo","=",$codigo)
         ->first();
 
-        $bolean = FALSE;
-
         if($ordenes != NULL){
-            return view("ordenesResumen", compact("ordenes","bolean"));
+            return view("ordenesResumen", compact("ordenes","tiempoEntrega","bolean"));
         }
         else{
             return redirect()->route('ordenes.index')->withErrors([
-                'buscarCodigo' => '¡Esta Orden no existe o ya ha sido Asignada en el Sistema!'
+                'buscarCodigo' => '¡Esta Orden no existe o ya ha sido Finalizada en el Sistema!'
             ]);
         }
-        
     }
 
     // VISTA CON EL FORMULARIO PARA CREAR ORDEN
-
     public function create()
     {
         return view("crearOrden");
     }
 
     // CREAR NUEVA ORDEN EN EL SISTEMA
-
     public function store(Request $request)
     {
         $request->validate([

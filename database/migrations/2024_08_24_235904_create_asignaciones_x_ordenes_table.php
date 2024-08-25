@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('asiganciones_x_ordenes');
+        Schema::dropIfExists('asignaciones_x_ordenes');
     }
 };

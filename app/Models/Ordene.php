@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Menu $menu
  * @property MetodosPago $metodos_pago
  * @property Collection|AsignacionesXOrdene[] $asignaciones_x_ordenes
+ * @property Collection|Ruta[] $rutas
  *
  * @package App\Models
  */
@@ -73,5 +74,10 @@ class Ordene extends Model
 	public function asignaciones_x_ordenes()
 	{
 		return $this->hasMany(AsignacionesXOrdene::class, 'fk_orden');
+	}
+
+	public function rutas()
+	{
+		return $this->hasMany(Ruta::class, 'fk_orden');
 	}
 }
