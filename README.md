@@ -20,7 +20,7 @@ PASO N3 ----------------------------------------------------------
 
 Con el proyecto ya en vscode desde la terminal aplica
 el comando "php artisan migrate". 
-Depúes de aplciarlo revisa el phpMyAdmin para ver si se crearon las 
+Depúes de aplicarlo revisa el phpMyAdmin para ver si se crearon las 
 tablas correctamente.
 
 PASO N4 -----------------------------------------------------------
