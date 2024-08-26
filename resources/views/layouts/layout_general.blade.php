@@ -1,4 +1,4 @@
-{{-- LAYoUT PARA LA VISTA LOS LOGINS--}}
+{{-- LAYoUT PARA TODAS LAS VISTAS --}}
 
 <!DOCTYPE html>
 <html lang="en">
