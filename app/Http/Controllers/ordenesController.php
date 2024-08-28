@@ -93,7 +93,7 @@ class ordenesController
             'cedula' => 'required|numeric|regex:/^[0-9]{2}[0-9]{3}[0-9]{3}$/',
             'platillo' => 'required|in:Hamburgesa Mixta,Pizza Margarita,Ensalada César,Tacos de Pollo,Sopa de Lentejas',
             'orden_cantidad' => 'required|numeric|min:1',
-            'comentario_adicional' => 'required|string',
+            'comentario_adicional' => 'required|string|max:500',
             'metodo_pago' => 'required|in:Transferencia,Pago Móvil',
         ]);
 

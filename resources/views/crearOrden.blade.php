@@ -26,7 +26,7 @@
 
         {{-- INPUTS DEL FORMULARIO --}}
 
-        <div class="d-flex container">
+        <div class="d-flex formcrear container">
 
             <div class="w-100 my-2">
 

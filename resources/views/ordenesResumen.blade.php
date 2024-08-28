@@ -40,7 +40,7 @@
         </div>
   
         <div class="col mx-3">
-          <form class="d-flex formBuscar" action="{{ route("ordenes.show") }}" method="POST">
+          <form class="d-flex" action="{{ route("ordenes.show") }}" method="POST">
               @csrf
               <input type="text" class="form-control bg-transparent text-white me-2"
                   placeholder="Buscar por Código" name="buscarCodigo" value="{{ old('buscarCodigo') }}">

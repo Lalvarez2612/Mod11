@@ -51,7 +51,7 @@ class asignacionesController
         ->where("estatus_repartidor","Disponible")
         ->get();
 
-        //return $repartidores;
+    
         return view("asignarOrden", compact("ordenAsignar","repartidores"));
     }
 
