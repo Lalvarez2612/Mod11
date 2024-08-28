@@ -10,8 +10,9 @@
 <div class="container text-white text-center rounded-3 w-50 p-5 mt-5">
 
     <h1 class="fs-2 font-bold text-info">Bienvenido al Módulo de Delivery</h1>
-    <img src="{{ asset('img/deliveryLogo.png') }}" alt="Logo de la marca">
-
+    <div>
+        <img src="{{ asset('img/deliveryLogo.png') }}" alt="Logo de la marca" class="img mt-3">
+    </div>
 </div>
 
 @endsection    
@@ -25,6 +26,10 @@
     }
     .container img{
         margin: 0% 20%;
+    }
+    .img{
+        width: 50%;
+        
     }
 </style>
 

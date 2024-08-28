@@ -2,16 +2,23 @@
 
 body::-webkit-scrollbar{
     width: 7px;
-    background: black;
+    background: rgb(0, 0, 0);
 }
 body::-webkit-scrollbar-thumb{
-    background: rgb(5, 12, 71);
+    background: rgb(85, 154, 233);
     border-radius: 10px;
 }
 
 /* ESTILOS PARA EL HEADER */
 
 .header{
+    width: 100%;
+    background: rgb(5, 12, 71);
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+}
+.footer{
     width: 100%;
     background: rgb(5, 12, 71);
     position: sticky;
