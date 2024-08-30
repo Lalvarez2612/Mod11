@@ -17,6 +17,8 @@
     </div>
   @endif
 
+  
+
   {{--  ESTRCUTURA DE LA VISTA --}}
   <div class="container d-flex align-items-center flex-column w-100">
 
@@ -64,10 +66,12 @@
                 <div class="form-control text-start bg-transparent text-info" id="coord1" style="margin-right: 10px;">Punto de Origen: Instituto Universitario Jesús Obrero (IUJO)</div>
                 <select class="form-select text-info" id="coord2" name="punto_entrega">
                     <option value="Selecciona el Punto de Entrega">Selecciona el Punto de Entrega</option>
-                    <option value="10.4866465,-66.9424115">Urbanización Los Verdes/Paraíso</option>
-                    <option value="10.5,-66.9192749">Plaza Venezuela/Torre Previsora</option>
-                    <option value="10.5066887,-66.8519878">Centro Comercial Millenuim</option>
+                    @foreach ($direcciones as $direccion)
+                      <option value="{{$direccion->coord}}">{{$direccion->punto_referencia}}/{{$direccion->parroquia}}</option>
+                    @endforeach
+                    
                 </select>
+                
             </div>
         </form>
       @else
@@ -78,18 +82,15 @@
         <div class="d-flex justify-content-start mb-3 selectRuta">
             <div class="form-control text-start bg-transparent text-info" id="coord1" style="margin-right: 10px;">Punto de Origen: Instituto Universitario Jesús Obrero (IUJO)</div>
             <select class="form-select text-info" id="coord2" name="punto_entrega">
-              @if ($rutaBuscar->coordenadas_ruta == '10.4866465,-66.9424115')
-                <option value="10.4866465,-66.9424115">Punto de Entrega: Urbanización Los Verdes/Paraíso</option>
-              @elseif($rutaBuscar->coordenadas_ruta == '10.5,-66.9192749')
-                <option value="10.5,-66.9192749">Punto de Entrega: Plaza Venezuela/Torre Previsora</option>
-              @else
-                <option value="10.5066887,-66.8519878">Punto de Entrega: Centro Comercial Millenuim</option>   
-              @endif
+              
+                <option value="{{$rutaBuscar->coordenadas_ruta}}">Punto de Entrega: {{$rutaBuscar->punto_referencia}}/{{$rutaBuscar->parroquia}}</option>
+              
             </select>
         </div>
       @endif
         {{-- PARA MOSTRAR EL MAPA CON LA RUTA --}}
 		<div class="w-100 my-3 rounded" style="height: 460px;" id="map"></div>
+    
 	</div>
 
 @endsection  

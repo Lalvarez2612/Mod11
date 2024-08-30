@@ -33,6 +33,9 @@ Route::get("/asignacion/ruta/{id_ruta}",[asignacionesController::class,"findRuta
 Route::post("/entregas/show",[entregasController::class,"show"])->name("entregas.show");
 
 
+
+//intento de api
+/*
 Route::get('/api', function(){
     return view('prueba');
 });
@@ -42,4 +45,4 @@ Route::post('/api/save-coordinates', function(Request $request){
     $lon = $request->input('lon');
 
     return view('prueba',compact('lat','lon'));
-});
+}); */ 

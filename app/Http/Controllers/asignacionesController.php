@@ -50,7 +50,6 @@ class asignacionesController
         ->join("personas","personas.id_persona","=","repartidores.fk_persona")
         ->where("estatus_repartidor","Disponible")
         ->get();
-
     
         return view("asignarOrden", compact("ordenAsignar","repartidores"));
     }
@@ -62,16 +61,27 @@ class asignacionesController
         ->where("id_orden",$id_orden)
         ->first();
 
+        // CONSULTAR DIRECCIONES
+        $direcciones = Direccione::select('parroquia','punto_referencia')->selectRaw('CONCAT(latitud,",",longitud) AS coord')
+        ->join('clientes_x_direcciones','direcciones.id_direccion','=','clientes_x_direcciones.fk_direccion')
+        ->join('clientes','clientes_x_direcciones.fk_cliente','=','clientes.id_cliente')
+        ->join('ordenes','clientes.id_cliente','=','ordenes.fk_cliente')
+        ->groupBy('parroquia', 'punto_referencia', 'coord')
+        ->orderBy('punto_referencia','ASC')
+        ->get();
+
         $bolean = TRUE;
-        return view("calcularRuta",compact("id_orden","id_repartidor","ordenRuta","bolean"));;
+        return view("calcularRuta",compact("id_orden","id_repartidor","ordenRuta",'direcciones',"bolean"));;
     }
 
     // LOGICA PARA GUARDAR LA RUTA Y ASIGNAR LA ORDEN
     public function store(Request $request,$id_orden,$id_repartidor) 
     {
         $datosSelect = $request->post("punto_entrega");
+        $lista = Direccione::selectRaw('CONCAT(latitud,",",longitud) AS coord')
+        ->get();
 
-        if($datosSelect == "10.4866465,-66.9424115" || $datosSelect == "10.5,-66.9192749" || $datosSelect == "10.5066887,-66.8519878"){
+        if($lista->contains('coord',$datosSelect)){
             // CAPTURAR EL ID DE LA DIRECCION CON LAS COORDENADAS
             $id_dereccion = Direccione::select("id_direccion")
             ->whereRaw("CONCAT(latitud, ',', longitud) = ?", [$datosSelect])
@@ -112,7 +122,7 @@ class asignacionesController
     // LOGICA PARA VER UNA RUTA EN ESPECIFICO
     public function findRuta($id_ruta)
     {
-        $rutaBuscar = Ruta::select("id_ruta","orden_codigo")
+        $rutaBuscar = Ruta::select("id_ruta","orden_codigo",'parroquia','punto_referencia')
         ->selectRaw("CONCAT(latitud,',',longitud) AS coordenadas_ruta")
         ->join("direcciones","rutas.fk_direccion","=","direcciones.id_direccion")
         ->join("ordenes","rutas.fk_orden","=","ordenes.id_orden")
