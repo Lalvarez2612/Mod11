@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ordenesController;
 use App\Http\Controllers\asignacionesController;
 use App\Http\Controllers\entregasController;
+use Illuminate\Http\Request;
 
 // RUTAS GENERALES: (WELCOME, ORDENES, RUTAS ASIGNADAS Y ENTREGAS)
 Route::get("/",[ordenesController::class,"welcome"])->name("welcome.index");
@@ -30,3 +31,15 @@ Route::get("/asignacion/ruta/{id_ruta}",[asignacionesController::class,"findRuta
 
 // RUTA PARA LAS ORDENES ENTREGADAS
 Route::post("/entregas/show",[entregasController::class,"show"])->name("entregas.show");
+
+
+Route::get('/api', function(){
+    return view('prueba');
+});
+
+Route::post('/api/save-coordinates', function(Request $request){
+    $lat = $request->input('lat');
+    $lon = $request->input('lon');
+
+    return view('prueba',compact('lat','lon'));
+});
