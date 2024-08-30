@@ -5,7 +5,7 @@ const divPrincipal = document.getElementById("total");
 function calcularTotal() {
     let precioMenu = "";
 
-    if(menuSelecc.value == "Hamburgesa Mixta"){
+    if(menuSelecc.value == "Hamburguesa Mixta"){
         precioMenu = 10;
     }
     if(menuSelecc.value == "Pizza Margarita"){

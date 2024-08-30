@@ -43,11 +43,11 @@
                     <label class="form-label"><b>Platillos:</b></label>
                     <select class="form-select" name="platillo" id="menu">
                         <option value="" {{ old('platillo') == '' ? 'selected' : '' }}>Selecciona Uno</option>
-                        <option value="Hamburgesa Mixta" {{ old('platillo') == 'Hamburgesa Mixta' ? 'selected' : '' }}>Hamburgesa Mixta -> 10$</option>
-                        <option value="Pizza Margarita" {{ old('platillo') == 'Pizza Margarita' ? 'selected' : '' }}>Pizza Margarita -> 30$</option>
-                        <option value="Ensalada César" {{ old('platillo') == 'Ensalada César' ? 'selected' : '' }}>Ensalada César -> 15$</option>
-                        <option value="Tacos de Pollo" {{ old('platillo') == 'Tacos de Pollo' ? 'selected' : '' }}>Tacos de Pollo -> 10$</option>
-                        <option value="Sopa de Lentejas" {{ old('platillo') == 'Sopa de Lentejas' ? 'selected' : '' }}>Sopa de Lentejas -> 20$</option>
+                        @foreach ($platillos as $platillo)
+                        <option value="{{$platillo->nombre_menu}}" {{ old('platillo') == $platillo->nombre_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
+                        @endforeach
+                        
+                        
                     </select>
                 </div>
                 @error('platillo')

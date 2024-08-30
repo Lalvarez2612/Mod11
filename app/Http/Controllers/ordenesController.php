@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Models\Menu;
 use App\Models\Ordene;
 
 class ordenesController
@@ -83,7 +84,11 @@ class ordenesController
     // VISTA CON EL FORMULARIO PARA CREAR ORDEN
     public function create()
     {
-        return view("crearOrden");
+
+        $platillos = Menu::select('nombre_menu','precio_menu')->get();
+
+
+        return view("crearOrden", compact('platillos'));
     }
 
     // CREAR NUEVA ORDEN EN EL SISTEMA
@@ -91,7 +96,7 @@ class ordenesController
     {
         $request->validate([
             'cedula' => 'required|numeric|regex:/^[0-9]{2}[0-9]{3}[0-9]{3}$/',
-            'platillo' => 'required|in:Hamburgesa Mixta,Pizza Margarita,Ensalada César,Tacos de Pollo,Sopa de Lentejas',
+            'platillo' => 'required|in:Hamburguesa Mixta,Pizza Margarita,Ensalada César,Tacos de Pollo,Sopa de Lentejas',
             'orden_cantidad' => 'required|numeric|min:1',
             'comentario_adicional' => 'required|string|max:500',
             'metodo_pago' => 'required|in:Transferencia,Pago Móvil',
