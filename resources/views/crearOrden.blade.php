@@ -41,10 +41,10 @@
 
                 <div class="mb-3 text-info">
                     <label class="form-label"><b>Platillos:</b></label>
-                    <select class="form-select" name="platillo" id="menu">
+                    <select class="form-select" name="platillo" id="seleccion">
                         <option value="" {{ old('platillo') == '' ? 'selected' : '' }}>Selecciona Uno</option>
                         @foreach ($platillos as $platillo)
-                        <option value="{{$platillo->nombre_menu}}" {{ old('platillo') == $platillo->nombre_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
+                        <option value="{{$platillo->id_menu}}" {{ old('platillo') == $platillo->id_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
                         @endforeach
                         
                         
@@ -62,6 +62,11 @@
                 @error('orden_cantidad')
                     <div class="alert alert-danger mt-3">{{ $message }}</div>
                 @enderror
+
+                <div class="mb-3 text-info">
+                    <label class="form-label bg-transparent"><b>Precio unitario:</b></label>
+                    <div class="form-control bg-transparent text-white" id="precioU">0$</div>
+                </div>
 
                 <div class="mb-3 text-info">
                     <label class="form-label bg-transparent"><b>Total a Pagar:</b></label>

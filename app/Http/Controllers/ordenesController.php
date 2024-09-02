@@ -85,10 +85,19 @@ class ordenesController
     public function create()
     {
 
-        $platillos = Menu::select('nombre_menu','precio_menu')->get();
+        $platillos = Menu::select('id_menu','nombre_menu','precio_menu')->get();
 
 
         return view("crearOrden", compact('platillos'));
+    }
+
+
+    // SOLICITUD AJAX
+    public function calculo($id){
+
+        $menu=Menu::find($id);
+
+        return response()->json($menu);
     }
 
     // CREAR NUEVA ORDEN EN EL SISTEMA
@@ -96,7 +105,7 @@ class ordenesController
     {
         $request->validate([
             'cedula' => 'required|numeric|regex:/^[0-9]{2}[0-9]{3}[0-9]{3}$/',
-            'platillo' => 'required|in:Hamburguesa Mixta,Pizza Margarita,Ensalada César,Tacos de Pollo,Sopa de Lentejas',
+            'platillo' => 'required|exists:menus,id_menu',
             'orden_cantidad' => 'required|numeric|min:1',
             'comentario_adicional' => 'required|string|max:500',
             'metodo_pago' => 'required|in:Transferencia,Pago Móvil',
@@ -104,6 +113,7 @@ class ordenesController
 
         // HAYAR EL ID DEL CLIENTE
         $cedula = $request->post("cedula");
+        $idmenu = $request->post('platillo');
         $idClient = Cliente::select("id_cliente")
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
         ->where("cedula","=",$cedula)
@@ -119,26 +129,9 @@ class ordenesController
 
             // CAPTURAR LA fk_menu DEL FORMULARIO
 
-            if($request->post("platillo") == "Hamburgesa Mixta"){
-                $idMenu = 1;
-                $orden->fk_menu = $idMenu;
-            }
-            if($request->post("platillo") == "Pizza Margarita"){
-                $idMenu = 2;
-                $orden->fk_menu = $idMenu;
-            }
-            if($request->post("platillo") == "Ensalada César"){
-                $idMenu = 3;
-                $orden->fk_menu = $idMenu;
-            }
-            if($request->post("platillo") == "Tacos de Pollo"){
-                $idMenu = 4;
-                $orden->fk_menu = $idMenu;
-            }
-            if($request->post("platillo") == "Sopa de Lentejas"){
-                $idMenu = 5;
-                $orden->fk_menu = $idMenu;
-            }
+            
+                $orden->fk_menu = $idmenu;
+            
 
             // CAPTURAR EL METODO DE PAGO
 

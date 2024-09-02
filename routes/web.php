@@ -20,6 +20,7 @@ Route::get("/ordenes/edit/{id_orden}",[ordenesController::class,"edit"])->name("
 Route::put("/ordenes/update/{id_orden}",[ordenesController::class,"update"])->name("ordenes.update");
 Route::get("/ordenes/delete/{id_orden}",[ordenesController::class,"delete"])->name("ordenes.delete");
 Route::delete("/ordenes/destroy/{id_orden}",[ordenesController::class,"destroy"])->name("ordenes.destroy");
+Route::get('/ordenes/create/{id}',[ordenesController::class, 'calculo']);
 
 // RUTAS PARA ASIGNACIONES DE ORDENES Y CREAR O VER LAS RUTAS
 Route::get("/asignacion/{id_orden}",[asignacionesController::class,"create"])->name("asignacion.create");

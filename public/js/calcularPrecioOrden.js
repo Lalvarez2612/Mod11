@@ -1,29 +1,39 @@
-const menuSelecc = document.getElementById("menu");
-const unidades = document.getElementById('unidades');
-const divPrincipal = document.getElementById("total");
-    
-function calcularTotal() {
-    let precioMenu = "";
 
-    if(menuSelecc.value == "Hamburguesa Mixta"){
-        precioMenu = 10;
-    }
-    if(menuSelecc.value == "Pizza Margarita"){
-        precioMenu = 30;
-    }
-    if(menuSelecc.value == "Ensalada César"){
-        precioMenu = 15;
-    }
-    if(menuSelecc.value == "Tacos de Pollo"){
-        precioMenu = 10;
-    }
-    if(menuSelecc.value == "Sopa de Lentejas"){
-        precioMenu = 20;
-    }
+document.getElementById('seleccion').addEventListener('change', function() {
+    id = this.value;
 
-    const totalPrecio = precioMenu * parseInt(unidades.value) || 0; 
-    divPrincipal.textContent = `${totalPrecio}$`;
+    // Crear la solicitud AJAX 
+    var ajax = new XMLHttpRequest();
+    ajax.open('GET', '/ordenes/create/'+id, true);
+    ajax.onload = function() {
+        if (ajax.status === 200) {
+            response = JSON.parse(ajax.responseText);
+
+            // hacer el calculo del precio
+
+            
+            // Actualizar el DOM con los datos recibidos
+            document.getElementById('precioU').textContent = 
+                response.precio_menu+'$';
+        }
+        else{
+            alert('no se pudo hacer la solicitud')
+        }
+    };
+    ajax.send();
+});
+
+
+
+function calcularPrecio() {
+    precio=response.precio_menu;
+    cant=document.getElementById('unidades').value;
+    console.log(cant);
+    total=cant*precio ||1;
+    document.getElementById('total').textContent =
+        total+'$';
 }
-
-unidades.addEventListener('input', calcularTotal);
-menuSelecc.addEventListener('change', calcularTotal);
+prec=document.getElementById('precioU');
+prec.addEventListener('change', calcularPrecio);
+unidad=document.getElementById('unidades');
+unidad.addEventListener('input', calcularPrecio);
