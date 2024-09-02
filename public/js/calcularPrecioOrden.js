@@ -9,7 +9,7 @@ document.getElementById('seleccion').addEventListener('change', function() {
         if (ajax.status === 200) {
             response = JSON.parse(ajax.responseText);
 
-            // hacer el calculo del precio
+            
 
             
             // Actualizar el DOM con los datos recibidos
@@ -29,7 +29,7 @@ function calcularPrecio() {
     precio=response.precio_menu;
     cant=document.getElementById('unidades').value;
     console.log(cant);
-    total=cant*precio ||1;
+    total=cant*precio ||0;
     document.getElementById('total').textContent =
         total+'$';
 }

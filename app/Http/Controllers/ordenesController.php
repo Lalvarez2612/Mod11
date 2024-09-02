@@ -176,7 +176,7 @@ class ordenesController
     {
         $updateOrden = Ordene::select("id_orden","cedula","orden_codigo","precio_menu",
                                       "nombre_menu","orden_cantidad","orden_estatus",
-                                      "comentario_adicional","nombre_metodo")
+                                      "comentario_adicional","nombre_metodo",'ordenes.fk_menu as id_menu')
         ->selectRaw("precio_menu * orden_cantidad AS total_pago")
         ->join("clientes","clientes.id_cliente","=","ordenes.fk_cliente")
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
@@ -184,8 +184,11 @@ class ordenesController
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
         ->where("id_orden","=",$id_orden)
         ->first();
+        $platillos = Menu::select('id_menu','nombre_menu','precio_menu')->get();
 
-        return view("updateOrden", compact("updateOrden"));
+
+
+        return view("updateOrden", compact(["updateOrden","platillos"]));
 
     }
 

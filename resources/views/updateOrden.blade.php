@@ -43,12 +43,10 @@
 
                 <div class="mb-3 text-info">
                     <label class="form-label"><b>Platillos:</b></label>
-                    <select class="form-select" name="platillo" id="menu">
-                        <option value="Hamburgesa Mixta" {{ $updateOrden->nombre_menu == 'Hamburgesa Mixta' ? 'selected' : '' }}>Hamburgesa Mixta -> 10$</option>
-                        <option value="Pizza Margarita" {{ $updateOrden->nombre_menu == 'Pizza Margarita' ? 'selected' : '' }}>Pizza Margarita -> 30$</option>
-                        <option value="Ensalada César" {{ $updateOrden->nombre_menu == 'Ensalada César' ? 'selected' : '' }}>Ensalada César -> 15$</option>
-                        <option value="Tacos de Pollo" {{ $updateOrden->nombre_menu == 'Tacos de Pollo' ? 'selected' : '' }}>Tacos de Pollo -> 10$</option>
-                        <option value="Sopa de Lentejas" {{ $updateOrden->nombre_menu == 'Sopa de Lentejas' ? 'selected' : '' }}>Sopa de Lentejas -> 20$</option>
+                    <select class="form-select" name="platillo" id="seleccion">
+                        @foreach ($platillos as $platillo)
+                        <option value="{{$platillo->id_menu}}" {{ $updateOrden->id_menu == $platillo->id_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
+                        @endforeach
                     </select>
                 </div>
                 @error('platillo')
@@ -63,6 +61,13 @@
                 @error('orden_cantidad')
                     <div class="alert alert-danger mt-3">{{ $message }}</div>
                 @enderror
+
+
+                <div class="mb-3 text-info">
+                    <label class="form-label bg-transparent"><b>Precio unitario:</b></label>
+                    <div class="form-control bg-transparent text-white" id="precioU">{{$updateOrden->precio_menu}}$</div>
+                </div>
+
 
                 <div class="mb-3 text-info">
                     <label class="form-label bg-transparent"><b>Total a Pagar:</b></label>
