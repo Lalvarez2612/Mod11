@@ -197,10 +197,10 @@ class ordenesController
     public function update(Request $request, $id_orden)
     {
         $request->validate([
-            'cedula' => 'required|string|regex:/^[0-9]{2}[0-9]{3}[0-9]{3}$/',
-            'platillo' => 'required|in:Hamburgesa Mixta,Pizza Margarita,Ensalada César,Tacos de Pollo,Sopa de Lentejas',
+            'cedula' => 'required|numeric|regex:/^[0-9]{2}[0-9]{3}[0-9]{3}$/',
+            'platillo' => 'required|exists:menus,id_menu',
             'orden_cantidad' => 'required|numeric|min:1',
-            'comentario_adicional' => 'required|string',
+            'comentario_adicional' => 'required|string|max:500',
             'metodo_pago' => 'required|in:Transferencia,Pago Móvil',
         ]);
 
@@ -221,28 +221,10 @@ class ordenesController
             $ordenUpdate->fk_cliente = $idClient->id_cliente;
 
             // CAPTURAR LA fk_menu DEL FORMULARIO
-
-            if($request->post("platillo") == "Hamburgesa Mixta"){
-                $idMenu = 1;
-                $ordenUpdate->fk_menu = $idMenu;
-            }
-            if($request->post("platillo") == "Pizza Margarita"){
-                $idMenu = 2;
-                $ordenUpdate->fk_menu = $idMenu;
-            }
-            if($request->post("platillo") == "Ensalada César"){
-                $idMenu = 3;
-                $ordenUpdate->fk_menu = $idMenu;
-            }
-            if($request->post("platillo") == "Tacos de Pollo"){
-                $idMenu = 4;
-                $ordenUpdate->fk_menu = $idMenu;
-            }
-            if($request->post("platillo") == "Sopa de Lentejas"){
-                $idMenu = 5;
-                $ordenUpdate->fk_menu = $idMenu;
-            }
-
+            
+            
+            $ordenUpdate->fk_menu = $request->post('platillo');
+            
             // CAPTURAR EL METODO DE PAGO
 
             if($request->post("metodo_pago") == "Transferencia"){
