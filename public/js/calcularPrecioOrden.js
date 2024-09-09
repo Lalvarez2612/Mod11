@@ -15,6 +15,17 @@ document.getElementById('seleccion').addEventListener('change', function() {
             // Actualizar el DOM con los datos recibidos
             document.getElementById('precioU').textContent = 
                 response.precio_menu+'$';
+
+            
+                precio=document.getElementById('precioU').innerText;
+    cant=document.getElementById('unidades').value;
+    console.log(cant);
+    total=cant*parseFloat(precio.replace('$','')) ||0;
+    console.log(total);
+    document.getElementById('total').textContent =
+        total+'$';
+            
+            
         }
         else{
             alert('no se pudo hacer la solicitud')
@@ -24,12 +35,13 @@ document.getElementById('seleccion').addEventListener('change', function() {
 });
 
 
-
+total=null;
 function calcularPrecio() {
-    precio=response.precio_menu;
+    precio=document.getElementById('precioU').innerText;
     cant=document.getElementById('unidades').value;
     console.log(cant);
-    total=cant*precio ||0;
+    total=cant*parseFloat(precio.replace('$','')) ||0;
+    console.log(total);
     document.getElementById('total').textContent =
         total+'$';
 }
