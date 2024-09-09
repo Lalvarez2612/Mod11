@@ -27,14 +27,17 @@ class ordenesController
                                   "cedula","telefono","nombre_metodo")
         ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido")
         ->selectRaw("CONCAT(estado,', ',ciudad,', ',municipio,', ',parroquia,', ',punto_referencia) AS direccion")
+        ->distinct()
         ->join("menus","menus.id_menu","=","ordenes.fk_menu")
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
         ->join("clientes","clientes.id_cliente","=","ordenes.fk_cliente")
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
         ->join("clientes_x_direcciones","clientes_x_direcciones.fk_cliente","=","clientes.id_cliente")
         ->join("direcciones","clientes_x_direcciones.fk_direccion","=","direcciones.id_direccion")
+        
         ->where("orden_estatus","Sin Asignar")
         ->orWhere("orden_estatus","Asignada")
+        ->groupBy('orden_codigo')
         ->orderBy("fechaCreacion_orden","desc")
         ->get();
 

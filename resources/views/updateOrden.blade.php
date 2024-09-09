@@ -17,11 +17,7 @@
         <div class="d-flex justify-content-between align-items-center container">
             <h4 class="text-info">Actualización de la Orden: <b class="text-danger">{{$updateOrden->orden_codigo}}</b></h4>
 
-            {{-- BOTONES DEL FORMULARIO --}}
-            <div class="d-flex justify-content-end">
-                <a class="btn btn-outline-danger mx-3" href="{{ route('ordenes.index') }}">Cancelar</a>
-                <button type="submit" class="btn btn-outline-primary">Actualizar</button>
-            </div>
+            
 
         </div>
         <hr class="text-white">
@@ -94,6 +90,13 @@
                 @error('metodo_pago')
                     <div class="alert alert-danger mt-3">{{ $message }}</div>
                 @enderror
+
+
+                {{-- BOTONES DEL FORMULARIO --}}
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-outline-danger mx-3" href="{{ route('ordenes.index') }}">Cancelar</a>
+                <button type="submit" class="btn btn-outline-primary">Actualizar</button>
+            </div>
 
             </div>
         </div>
