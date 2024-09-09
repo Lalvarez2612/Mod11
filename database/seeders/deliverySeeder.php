@@ -47,6 +47,9 @@ class deliverySeeder extends Seeder
             ['estado' => 'Distrito Capital', 'ciudad' => 'Caracas', 'municipio' => 'Libertador', 'parroquia' => 'El Paraíso', 'punto_referencia' => 'Urbanización los Verdes', 'latitud' => '10.4866465', 'longitud' => '-66.9424115'],
             ['estado' => 'Distrito Capital', 'ciudad' => 'Caracas', 'municipio' => 'Libertador', 'parroquia' => 'El Recreo', 'punto_referencia' => 'En Frente de la Torre La Previsora', 'latitud' => '10.5', 'longitud' => '-66.9192749'],
             ['estado' => 'Miranda', 'ciudad' => 'Gran Caracas', 'municipio' => 'Sucre', 'parroquia' => 'Los Dos Caminos', 'punto_referencia' => 'Cerca de la estación de metro Los Dos Caminos', 'latitud' => '10.5066887', 'longitud' => '-66.8519878'],
+            ['estado' => 'Distrito Capital','ciudad' => 'Caracas','municipio' => 'Libertador','parroquia' => 'Candelaria','punto_referencia' => 'Al lado de la torre mercantil','latitud' => '10.506081','longitud' => '-66.904309',],
+            ['estado' => 'Distrito Capital','ciudad' => 'Caracas','municipio' => 'Libertador','parroquia' => 'Sucre','punto_referencia' => 'En frente de la iglesia Sagrada Familia','latitud' => '10.504692','longitud' => '-66.952679',],
+            ['estado' => 'Distrito Capital','ciudad' => 'Caracas','municipio' => 'Libertador','parroquia' => 'Sucre','punto_referencia' => 'Subiendo la cuesta','latitud' =>'10.51401614199949','longitud' => '-66.95131135961391',]
         ]);
 
         // INSERTAR DATO EN LA TABLA "clientes_x_direcciones"
@@ -54,6 +57,11 @@ class deliverySeeder extends Seeder
             ['fk_cliente' => 1, 'fk_direccion' => 1],
             ['fk_cliente' => 2, 'fk_direccion' => 2],
             ['fk_cliente' => 3, 'fk_direccion' => 3],
+            ['fk_cliente' => 1, 'fk_direccion' => 4],
+            ['fk_cliente' => 2, 'fk_direccion' => 5],
+            ['fk_cliente' => 3, 'fk_direccion' => 5],
+            ['fk_cliente' => 1, 'fk_direccion' => 6],
+            ['fk_cliente' => 2, 'fk_direccion' => 7]
         ]);
 
         // INSERTAR DATO EN LA TABLA "metodos_pagos"
