@@ -40,7 +40,7 @@
                     <select class="form-select" name="platillo" id="seleccion">
                         <option value="" {{ old('platillo') == '' ? 'selected' : '' }}>Selecciona Uno</option>
                         @foreach ($platillos as $platillo)
-                        <option value="{{$platillo->id_menu}}" {{ old('platillo') == $platillo->id_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
+                        <option value="{{$platillo->id_menu}}" data-precio="{{$platillo->precio_menu}}" {{ old('platillo') == $platillo->id_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
                         @endforeach
                         
                         

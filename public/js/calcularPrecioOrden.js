@@ -49,3 +49,15 @@ prec=document.getElementById('precioU');
 prec.addEventListener('change', calcularPrecio);
 unidad=document.getElementById('unidades');
 unidad.addEventListener('input', calcularPrecio);
+
+document.addEventListener("DOMContentLoaded", function () {
+        let pr =document.getElementById('seleccion').selectedOptions[0].dataset.precio;
+        if (pr != undefined){
+        document.getElementById('precioU').textContent = 
+                pr+'$';
+        }
+        let can=document.getElementById('unidades').value;
+        let tota=can*parseFloat(pr) ||0;
+        document.getElementById('total').textContent =
+        tota+'$';
+})

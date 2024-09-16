@@ -41,7 +41,7 @@
                     <label class="form-label"><b>Platillos:</b></label>
                     <select class="form-select" name="platillo" id="seleccion">
                         @foreach ($platillos as $platillo)
-                        <option value="{{$platillo->id_menu}}" {{ $updateOrden->id_menu == $platillo->id_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
+                        <option value="{{$platillo->id_menu}}" data-precio="{{$updateOrden->precio_menu}}" {{ $updateOrden->id_menu == $platillo->id_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
                         @endforeach
                     </select>
                 </div>
