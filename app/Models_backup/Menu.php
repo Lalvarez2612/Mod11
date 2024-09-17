@@ -39,7 +39,6 @@ class Menu extends Model
 
 	public function ordenes()
 	{
-		return $this->belongsToMany(Ordene::class, 'ordenes_has_menus', 'menus_id_menu', 'ordenes_id_orden')
-					->withPivot('id_ordenes_has_menus', 'cantidad');
+		return $this->hasMany(Ordene::class, 'fk_menu');
 	}
 }

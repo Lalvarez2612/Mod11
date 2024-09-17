@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id_orden
  * @property int $fk_cliente
+ * @property int $fk_menu
  * @property int $fk_metodoPago
  * @property string $orden_codigo
  * @property int $orden_cantidad
@@ -23,9 +24,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $fechaCreacion_orden
  * 
  * @property Cliente $cliente
+ * @property Menu $menu
  * @property MetodosPago $metodos_pago
  * @property Collection|AsignacionesXOrdene[] $asignaciones_x_ordenes
- * @property Collection|Menu[] $menus
  * @property Collection|Ruta[] $rutas
  *
  * @package App\Models
@@ -38,6 +39,7 @@ class Ordene extends Model
 
 	protected $casts = [
 		'fk_cliente' => 'int',
+		'fk_menu' => 'int',
 		'fk_metodoPago' => 'int',
 		'orden_cantidad' => 'int',
 		'fechaCreacion_orden' => 'datetime'
@@ -45,6 +47,7 @@ class Ordene extends Model
 
 	protected $fillable = [
 		'fk_cliente',
+		'fk_menu',
 		'fk_metodoPago',
 		'orden_codigo',
 		'orden_cantidad',
@@ -58,6 +61,11 @@ class Ordene extends Model
 		return $this->belongsTo(Cliente::class, 'fk_cliente');
 	}
 
+	public function menu()
+	{
+		return $this->belongsTo(Menu::class, 'fk_menu');
+	}
+
 	public function metodos_pago()
 	{
 		return $this->belongsTo(MetodosPago::class, 'fk_metodoPago');
@@ -66,12 +74,6 @@ class Ordene extends Model
 	public function asignaciones_x_ordenes()
 	{
 		return $this->hasMany(AsignacionesXOrdene::class, 'fk_orden');
-	}
-
-	public function menus()
-	{
-		return $this->belongsToMany(Menu::class, 'ordenes_has_menus', 'ordenes_id_orden', 'menus_id_menu')
-					->withPivot('id_ordenes_has_menus', 'cantidad');
 	}
 
 	public function rutas()

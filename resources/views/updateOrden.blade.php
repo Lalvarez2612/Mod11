@@ -9,7 +9,7 @@
 
     {{-- FOMRULARIO PARA CREAR ORDEN--}}
 
-    <form class="container formCrearOrden bg-transparent rounded mb-5 p-5" action="{{ route("ordenes.update", $updateOrden->id_orden) }}" 
+    <form class="container formCrearOrden rounded mb-5 p-5" action="{{ route("ordenes.update", $updateOrden->id_orden) }}" 
         method="POST">
         @csrf
         @method("PUT")

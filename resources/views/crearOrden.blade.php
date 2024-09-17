@@ -9,7 +9,7 @@
 
     {{-- FOMRULARIO PARA CREAR ORDEN--}}
 
-    <form class="container formCrearOrden bg-transparent rounded mb-5 p-5" action="{{ route("ordenes.store") }}" method="POST">
+    <form class="container formCrearOrden rounded mb-5 p-5" action="{{ route("ordenes.store") }}" method="POST">
         @csrf
 
         <div class="d-flex justify-content-between align-items-center container">
