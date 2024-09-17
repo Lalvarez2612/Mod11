@@ -23,7 +23,7 @@
   <div class="d-flex align-items-center flex-column w-100 px-5">
     <div class="text-center text-info">
         <h5>Orden Seleccionada: <b class="text-danger">{{ $ordenAsignar->orden_codigo }}</b></h5>
-        {{-- <h5>Platillo: <b class="text-danger">{{ $ordenAsignar->nombre_menu }}</b></h5> --}}
+         <h5>Cliente: <b class="text-danger">{{ $ordenAsignar->nombre }}</b></h5> 
     </div>
 
     {{-- MOSTRAMOS LOS REPARTIDORES DISPONIBLES --}}

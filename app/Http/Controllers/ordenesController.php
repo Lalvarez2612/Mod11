@@ -38,10 +38,10 @@ class ordenesController
         ->orderBy("fechaCreacion_orden","desc")
         ->get();
 
-        $platillos=Ordene::select('id_orden','nombre_menu','descripcion_menu','precio_menu')
+        $platillos=Ordene::select('id_orden','nombre_menu','descripcion_menu','precio_menu','cantidad')
         ->join('ordenes_has_menus','id_orden','=','ordenes_id_orden')
         ->join('menus','id_menu','=','menus_id_menu')
-        ->groupBy('id_menu')
+        ->groupBy('id_ordenes_has_menus')
         ->get();
 
         return view("ordenesResumen", compact("ordenes","tiempoEntrega",'platillos',"bolean"));
@@ -71,10 +71,11 @@ class ordenesController
         ->groupBy('orden_codigo')
         ->get();
 
-        $platillos= Ordene::select('nombre_menu','descripcion_menu','precio_menu')
+        $platillos= Ordene::select('id_orden','nombre_menu','descripcion_menu','precio_menu','cantidad')
         ->join('ordenes_has_menus','id_orden','=','ordenes_id_orden')
         ->join('menus','id_menu','=','menus_id_menu')
         ->where('orden_codigo','=',$codigo)
+        ->groupBy('id_ordenes_has_menus')
         ->get();
 
 
@@ -203,7 +204,7 @@ class ordenesController
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
         ->where("id_orden","=",$id_orden)
         ->first();
-        $updatePlatillos=Ordene::select('id_orden','id_menu','cantidad','precio_menu','nombre_menu')
+        $updatePlatillos=Ordene::select('id_orden','id_menu','cantidad','precio_menu','nombre_menu','cantidad')
         ->join('ordenes_has_menus','ordenes_id_orden','=','id_orden')
         ->join('menus','id_menu','=','menus_id_menu')
         ->where('id_orden','=',$id_orden)
@@ -284,21 +285,27 @@ class ordenesController
 
     public function delete($id_orden)
     {
-        $ordenDelete = Ordene::select("id_orden","orden_codigo","nombre_menu","descripcion_menu","orden_estatus",
-                                  "comentario_adicional","orden_cantidad","fechaCreacion_orden",
-                                  "cedula","telefono","nombre_metodo")
+        $item = Ordene::select("id_orden","orden_codigo","orden_estatus",
+        "fechaCreacion_orden","cedula","telefono","nombre_metodo",'comentario_adicional')
         ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido")
         ->selectRaw("CONCAT(estado,', ',ciudad,', ',municipio,', ',parroquia,', ',punto_referencia) AS direccion")
-        ->join("menus","menus.id_menu","=","ordenes.fk_menu")
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
         ->join("clientes","clientes.id_cliente","=","ordenes.fk_cliente")
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
         ->join("clientes_x_direcciones","clientes_x_direcciones.fk_cliente","=","clientes.id_cliente")
         ->join("direcciones","clientes_x_direcciones.fk_direccion","=","direcciones.id_direccion")
         ->where("id_orden","=",$id_orden)
+        ->groupBy('orden_codigo')
         ->first();
 
-        return view("deleteOrden",compact("ordenDelete"));
+        $platillos= Ordene::select('id_orden','nombre_menu','descripcion_menu','precio_menu','cantidad')
+        ->join('ordenes_has_menus','id_orden','=','ordenes_id_orden')
+        ->join('menus','id_menu','=','menus_id_menu')
+        ->where("id_orden","=",$id_orden)
+        ->groupBy('id_ordenes_has_menus')
+        ->get();
+
+        return view("deleteOrden",compact('platillos','item'));
 
     }
 

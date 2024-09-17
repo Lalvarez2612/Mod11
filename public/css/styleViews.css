@@ -46,12 +46,21 @@ body::-webkit-scrollbar-thumb{
 }
 .cards{
     width: 545px;
+    display: flex;
+    flex-direction: column;
     color: white;
     padding: 20px;
     border-radius: 10px;
     background: rgb(5, 12, 71);
     border: 2px solid rgb(5, 12, 71);
     margin-right: 15px;
+}
+.bottom{
+    margin-top: auto;
+}
+.tuqui{
+    background-color: rgb(12, 196, 165);
+    color: rgb(5, 12, 71);
 }
 .formBuscar input{
     border: 2px solid rgb(7, 20, 143);

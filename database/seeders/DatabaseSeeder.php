@@ -15,7 +15,7 @@ use App\Models\Ordene;
 use App\Models\OrdenesHasMenu;
 use App\Models\Ruta;
 
-class deliverySeeder extends Seeder
+class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
@@ -130,7 +130,6 @@ class deliverySeeder extends Seeder
             ['id_ordenes_has_menus' => 5,'ordenes_id_orden' => 2,'menus_id_menu' => 5,'cantidad' => 3,],
             ['id_ordenes_has_menus' => 6,'ordenes_id_orden' => 3,'menus_id_menu' => 1,'cantidad' => 1,],
             ['id_ordenes_has_menus' => 7,'ordenes_id_orden' => 4,'menus_id_menu' => 2,'cantidad' => 2,],
-            ['id_ordenes_has_menus' => 8,'ordenes_id_orden' => 5,'menus_id_menu' => 3,'cantidad' => 3,],
         ]);
 
         // INSERTAR DATO EN LA TABLA "rutas"

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('fk_cliente')->index('fk_ordenes_clientes1_idx');
             $table->integer('fk_metodoPago')->index('fk_ordenes_metodos_pagos1_idx');
             $table->string('orden_codigo', 100)->unique('orden_codigo_unique');
-            $table->integer('orden_cantidad');
             $table->string('orden_estatus', 100);
             $table->string('comentario_adicional', 200);
             $table->date('fechaCreacion_orden');

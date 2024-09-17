@@ -45,24 +45,29 @@
   <div class="cajaCards text-center mt-2">
     @foreach ($ordenes as $item)
       <div class="cards mb-3">
-        <div class="d-flex justify-content-between mb-2">
-          <h4 class="text-info">{{ $item->orden_codigo }}</h4>
-          <h4 class="text-info">{{ $item->nombre_menu }}</h4>
+        <div class="d-flex justify-content-center mb-2">
+          <h2 class="text-info">{{ $item->orden_codigo }}</h2>
         </div>
         <hr class="text-white">
 
         <div class="text-start mb-2">
-          <h5 class="text-info"><b>Descripción del Plato:</b></h5>
-          <p>{{ $item->descripcion_menu }}</p>
+
+          @foreach ($platillos as $platillo)
+            @if ($platillo->id_orden == $item->id_orden)
+              <h3 class="text-info"><b>Plato:</b> {{$platillo->nombre_menu}}</h3>
+              <h5 class="text-info"><b>Descripción del Plato:</b></h5>
+              <p>{{ $platillo->descripcion_menu }}</p>
+              <h5 class="text-info">Canidad pedida</h5>
+              <p>{{$platillo->cantidad}} Unidades</p>
+            @endif    
+          @endforeach
 
           <h5 class="text-info"><b>Comentario Adicional del Cliente:</b></h5>
           <p>{{ $item->comentario_adicional }}</p>
 
-          <p><b class="text-info">Cantidad a Preparar:</b> {{ $item->orden_cantidad }} Unidades</p>
           <p><b class="text-info">Orden creada el Día:</b> {{ $item->fechaCreacion_orden->format("d/m/Y") }}</p>
           <p class="estaTime"><b class="text-info">Estatus de la Orden:</b> {{ $item->orden_estatus }}</p>
           <p class="estaTime"><b class="text-info">Tiempo Total de la Entrega:</b> {{\Carbon\Carbon::parse($item->tiempo_total)->format('h:i:s')}}</p>
-          
         </div>
         <hr class="text-white">
 
@@ -73,7 +78,7 @@
           <p><b class="text-info">Teléfono:</b> {{ $item->telefono }}</p>
           <p><b class="text-info">Dirección:</b> {{ $item->direccion }}</p>
           <p><b class="text-info">Metodo de Pago:</b> {{ $item->nombre_metodo }}</p>
-        </div> 
+        </div>
       </div>
     @endforeach
   </div>
