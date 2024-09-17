@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Menu;
 use App\Models\Ordene;
+use App\Models\OrdenesHasMenu;
 
 class ordenesController
 {
@@ -23,7 +24,7 @@ class ordenesController
         $bolean = TRUE;
         $tiempoEntrega ="";
         $ordenes = Ordene::select("id_orden","orden_codigo","orden_estatus","fechaCreacion_orden",
-                                  "cedula","telefono","nombre_metodo")
+                                  "cedula","telefono","nombre_metodo",'comentario_adicional')
         ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido")
         ->selectRaw("CONCAT(estado,', ',ciudad,', ',municipio,', ',parroquia,', ',punto_referencia) AS direccion")
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
@@ -43,7 +44,7 @@ class ordenesController
         ->groupBy('id_menu')
         ->get();
 
-        return view("ordenesResumen", compact("ordenes","tiempoEntrega","bolean"));
+        return view("ordenesResumen", compact("ordenes","tiempoEntrega",'platillos',"bolean"));
     }
 
     // ENCONTRAR UNA ORDEN POR CODIGO
@@ -58,7 +59,7 @@ class ordenesController
         $codigo = $request->post("buscarCodigo");
         $ordenes = Ordene::select("id_orden","orden_codigo","orden_estatus",
                                   "fechaCreacion_orden",
-                                  "cedula","telefono","nombre_metodo")
+                                  "cedula","telefono","nombre_metodo",'comentario_adicional')
         ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido")
         ->selectRaw("CONCAT(estado,', ',ciudad,', ',municipio,', ',parroquia,', ',punto_referencia) AS direccion")
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
@@ -117,15 +118,18 @@ class ordenesController
     {
         $request->validate([
             'cedula' => 'required|numeric|regex:/^[0-9]{2}[0-9]{3}[0-9]{3}$/',
-            'platillo' => 'required|exists:menus,id_menu',
-            'orden_cantidad' => 'required|numeric|min:1',
+            'platillo' => 'required|array',
+            'platillo.*' => 'required|exists:menus,id_menu',
+            'orden_cantidad'=> 'required|array',
+            'orden_cantidad.*' => 'required|numeric|min:1',
             'comentario_adicional' => 'required|string|max:500',
             'metodo_pago' => 'required|in:Transferencia,Pago Móvil',
         ]);
 
         // HAYAR EL ID DEL CLIENTE
         $cedula = $request->post("cedula");
-        $idmenu = $request->post('platillo');
+        $platillos = $request->post('platillo');
+        $cantidad=$request->orden_cantidad;
         $idClient = Cliente::select("id_cliente")
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
         ->where("cedula","=",$cedula)
@@ -139,12 +143,7 @@ class ordenesController
             // CAPTURAR LOS DATOS DEL FORM PARA CREAR UNA NUEVA ORDEN
             $orden->fk_cliente = $idClient->id_cliente;
 
-            // CAPTURAR LA fk_menu DEL FORMULARIO
-
             
-                $orden->fk_menu = $idmenu;
-            
-
             // CAPTURAR EL METODO DE PAGO
 
             if($request->post("metodo_pago") == "Transferencia"){
@@ -163,14 +162,25 @@ class ordenesController
             $codigoOrden = "O-".$numAleatorio;
             $orden->orden_codigo = $codigoOrden;
 
-            $orden->orden_cantidad = $request->post("orden_cantidad");
             $orden->comentario_adicional = $request->post("comentario_adicional");
             $orden->orden_estatus = "Sin Asignar";
-            $orden->fechaCreacion_orden = NOW();
+            $orden->fechaCreacion_orden = NOW()->setTimezone('America/Caracas')->format('H:i:s');
 
             $orden->save(); // GENERAMOS EL INSERT EN LA TABLA "ordenes"
 
             if($orden->save()){
+                $aux=0;
+                foreach ($platillos as $platillo) {
+                    $oXm=new OrdenesHasMenu();
+                    $oXm->ordenes_id_orden=$orden->id_orden;
+                    $oXm->menus_id_menu=$platillo;
+                    $oXm->cantidad=$cantidad[$aux];
+                    $oXm->save();
+                    if($oXm->save){
+                        $aux++;
+                    }
+                }
+                
                 return redirect()->route('ordenes.index')->with("success", "¡Orden Creada con Éxito!");
             }
         } 
@@ -186,21 +196,25 @@ class ordenesController
 
     public function edit($id_orden)
     {
-        $updateOrden = Ordene::select("id_orden","cedula","orden_codigo","precio_menu",
-                                      "nombre_menu","orden_cantidad","orden_estatus",
-                                      "comentario_adicional","nombre_metodo",'ordenes.fk_menu as id_menu')
-        ->selectRaw("precio_menu * orden_cantidad AS total_pago")
+        $updateOrden = Ordene::select("id_orden","cedula","orden_codigo","orden_estatus",
+                                      "nombre_metodo")
         ->join("clientes","clientes.id_cliente","=","ordenes.fk_cliente")
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
-        ->join("menus","menus.id_menu","=","ordenes.fk_menu")
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
         ->where("id_orden","=",$id_orden)
         ->first();
+        $updatePlatillos=Ordene::select('id_orden','id_menu','cantidad','precio_menu','nombre_menu')
+        ->join('ordenes_has_menus','ordenes_id_orden','=','id_orden')
+        ->join('menus','id_menu','=','menus_id_menu')
+        ->where('id_orden','=',$id_orden)
+        ->groupBy('id_ordenes_has_menus')
+        ->get();
+
         $platillos = Menu::select('id_menu','nombre_menu','precio_menu')->get();
 
 
 
-        return view("updateOrden", compact(["updateOrden","platillos"]));
+        return view("updateOrden", compact(["updateOrden","platillos",'updatePlatillos']));
 
     }
 
