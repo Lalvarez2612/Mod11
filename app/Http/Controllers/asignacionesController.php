@@ -38,9 +38,10 @@ class asignacionesController
         // PARA CAPTURAR EL ID DE LA ORDEN 
     
         $ordenAsignar = Ordene::select("id_orden","orden_codigo","nombre_menu")
-        ->join("menus","menus.id_menu","=","ordenes.fk_menu")
+        ->join('ordenes_has_menus','ordenes_id_orden','=','id_orden')
+        ->join("menus","id_menu","=","menus_id_menu")
         ->where("id_orden",$id_orden)
-        ->first();
+        ->get();
 
         // CONSULTAR LOS REPARTIDORES DISPONIBLES
 
@@ -146,7 +147,7 @@ class asignacionesController
 
         $IdsOrdens = Ordene::select("id_orden","id_asignacionOrden")
         ->join("asignaciones_x_ordenes","asignaciones_x_ordenes.fk_orden","=","ordenes.id_orden")
-        ->where("orden_codigo",$codigo)
+        ->where("orden_codigo",'=',$codigo)
         ->first();
 
         if($IdsOrdens !== NULL){

@@ -22,23 +22,25 @@ class ordenesController
     {
         $bolean = TRUE;
         $tiempoEntrega ="";
-        $ordenes = Ordene::select("id_orden","orden_codigo","nombre_menu","descripcion_menu","orden_estatus",
-                                  "comentario_adicional","orden_cantidad","fechaCreacion_orden",
+        $ordenes = Ordene::select("id_orden","orden_codigo","orden_estatus","fechaCreacion_orden",
                                   "cedula","telefono","nombre_metodo")
         ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido")
         ->selectRaw("CONCAT(estado,', ',ciudad,', ',municipio,', ',parroquia,', ',punto_referencia) AS direccion")
-        ->distinct()
-        ->join("menus","menus.id_menu","=","ordenes.fk_menu")
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
         ->join("clientes","clientes.id_cliente","=","ordenes.fk_cliente")
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
         ->join("clientes_x_direcciones","clientes_x_direcciones.fk_cliente","=","clientes.id_cliente")
         ->join("direcciones","clientes_x_direcciones.fk_direccion","=","direcciones.id_direccion")
-        
         ->where("orden_estatus","Sin Asignar")
         ->orWhere("orden_estatus","Asignada")
         ->groupBy('orden_codigo')
         ->orderBy("fechaCreacion_orden","desc")
+        ->get();
+
+        $platillos=Ordene::select('id_orden','nombre_menu','descripcion_menu','precio_menu')
+        ->join('ordenes_has_menus','id_orden','=','ordenes_id_orden')
+        ->join('menus','id_menu','=','menus_id_menu')
+        ->groupBy('id_menu')
         ->get();
 
         return view("ordenesResumen", compact("ordenes","tiempoEntrega","bolean"));
@@ -54,19 +56,26 @@ class ordenesController
 
         $bolean = FALSE;
         $codigo = $request->post("buscarCodigo");
-        $ordenes = Ordene::select("id_orden","orden_codigo","nombre_menu","descripcion_menu","orden_estatus",
-                                  "comentario_adicional","orden_cantidad","fechaCreacion_orden",
+        $ordenes = Ordene::select("id_orden","orden_codigo","orden_estatus",
+                                  "fechaCreacion_orden",
                                   "cedula","telefono","nombre_metodo")
         ->selectRaw("CONCAT(nombres,' ',apellidos) AS nombre_apellido")
         ->selectRaw("CONCAT(estado,', ',ciudad,', ',municipio,', ',parroquia,', ',punto_referencia) AS direccion")
-        ->join("menus","menus.id_menu","=","ordenes.fk_menu")
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
         ->join("clientes","clientes.id_cliente","=","ordenes.fk_cliente")
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
         ->join("clientes_x_direcciones","clientes_x_direcciones.fk_cliente","=","clientes.id_cliente")
         ->join("direcciones","clientes_x_direcciones.fk_direccion","=","direcciones.id_direccion")
         ->where("orden_codigo","=",$codigo)
+        ->groupBy('orden_codigo')
         ->get();
+
+        $platillos= Ordene::select('nombre_menu','descripcion_menu','precio_menu')
+        ->join('ordenes_has_menus','id_orden','=','ordenes_id_orden')
+        ->join('menus','id_menu','=','menus_id_menu')
+        ->where('orden_codigo','=',$codigo)
+        ->get();
+
 
         // CONSULTAR EL TIEMPO TOTAL EN CASO DE QUE LA ORDE HAYA SIDO ENTREGADA
         $tiempoEntrega = Ordene::selectRaw("SEC_TO_TIME(ABS(TIME_TO_SEC(TIMEDIFF(tiempo_inicio, tiempo_final)))) as tiempo_total")
@@ -75,7 +84,7 @@ class ordenesController
         ->first();
 
         if($ordenes != NULL){
-            return view("ordenesResumen", compact("ordenes","tiempoEntrega","bolean"));
+            return view("ordenesResumen", compact("ordenes","tiempoEntrega",'platillos',"bolean"));
         }
         else{
             return redirect()->route('ordenes.index')->withErrors([
