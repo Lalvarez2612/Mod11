@@ -12,6 +12,7 @@ use App\Models\AsignacionesXOrdene;
 use App\Models\MetodosPago;
 use App\Models\Menu;
 use App\Models\Ordene;
+use App\Models\OrdenesHasMenu;
 use App\Models\Ruta;
 
 class deliverySeeder extends Seeder
@@ -84,10 +85,8 @@ class deliverySeeder extends Seeder
             [
                 'id_orden' => 1,
                 'fk_cliente' => 1,
-                'fk_menu' => 1,
                 'fk_metodoPago' => 1,
                 'orden_codigo' => 'O-3342',
-                'orden_cantidad' => 5,
                 'orden_estatus' => 'Sin Asignar',
                 'comentario_adicional' => 'Todas con nextra queso amarrilo y salsa de maíz. Un refresco pepsi de 2 litros.',
                 'fechaCreacion_orden' => now(),
@@ -95,10 +94,8 @@ class deliverySeeder extends Seeder
             [
                 'id_orden' => 2,
                 'fk_cliente' => 2,
-                'fk_menu' => 2,
                 'fk_metodoPago' => 2,
                 'orden_codigo' => 'O-1255',
-                'orden_cantidad' => 4,
                 'orden_estatus' => 'Aisgnada',
                 'comentario_adicional' => 'Dos con extra queso, una de peeroni y la otra de champiñones. Un refresco chinoto de 1 litro.',
                 'fechaCreacion_orden' => now(),
@@ -106,10 +103,8 @@ class deliverySeeder extends Seeder
             [
                 'id_orden' => 3,
                 'fk_cliente' => 3,
-                'fk_menu' => 4,
                 'fk_metodoPago' => 2,
                 'orden_codigo' => 'O-8964',
-                'orden_cantidad' => 20,
                 'orden_estatus' => 'Entregada',
                 'comentario_adicional' => 'Todos con extra queso y salsa de maiz, agrega 3 refrescos cocacola de 2 litros. Pedido para un evento.',
                 'fechaCreacion_orden' => now(),
@@ -117,14 +112,25 @@ class deliverySeeder extends Seeder
             [
                 'id_orden' => 4,
                 'fk_cliente' => 3,
-                'fk_menu' => 3,
                 'fk_metodoPago' => 1,
                 'orden_codigo' => 'O-2367',
-                'orden_cantidad' => 5,
                 'orden_estatus' => 'Asignada',
                 'comentario_adicional' => 'Con extra queso, mayonesa y salsa de tomate. Un refresco colita de 1 litro.',
                 'fechaCreacion_orden' => now(),
             ],
+        ]);
+
+        // insertar datos en tabla oXm
+
+        OrdenesHasMenu::insert([
+            ['id_ordenes_has_menus' => 1,'ordenes_id_orden' => 1,'menus_id_menu' => 1,'cantidad' => 2,],
+            ['id_ordenes_has_menus' => 2,'ordenes_id_orden' => 1,'menus_id_menu' => 2,'cantidad' => 1,],
+            ['id_ordenes_has_menus' => 3,'ordenes_id_orden' => 2,'menus_id_menu' => 3,'cantidad' => 1,],
+            ['id_ordenes_has_menus' => 4,'ordenes_id_orden' => 2,'menus_id_menu' => 4,'cantidad' => 2,],
+            ['id_ordenes_has_menus' => 5,'ordenes_id_orden' => 2,'menus_id_menu' => 5,'cantidad' => 3,],
+            ['id_ordenes_has_menus' => 6,'ordenes_id_orden' => 3,'menus_id_menu' => 1,'cantidad' => 1,],
+            ['id_ordenes_has_menus' => 7,'ordenes_id_orden' => 4,'menus_id_menu' => 2,'cantidad' => 2,],
+            ['id_ordenes_has_menus' => 8,'ordenes_id_orden' => 5,'menus_id_menu' => 3,'cantidad' => 3,],
         ]);
 
         // INSERTAR DATO EN LA TABLA "rutas"
