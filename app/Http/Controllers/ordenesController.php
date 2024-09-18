@@ -327,6 +327,7 @@ class ordenesController
 
     public function destroy($id_orden)
     {
+        $oXm1=OrdenesHasMenu::where('ordenes_id_orden','=',$id_orden)->delete();
         $ordenDestroy = Ordene::find($id_orden);
         $ordenDestroy->delete();
 
