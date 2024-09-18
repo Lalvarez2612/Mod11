@@ -37,37 +37,65 @@
                     <div class="alert alert-danger mt-3">{{ $message }}</div>
                 @enderror
 
-                <div class="mb-3 text-info">
-                    <label class="form-label"><b>Platillos:</b></label>
-                    <select class="form-select" name="platillo" id="seleccion">
+                <div id="selectContainer" class="epa mb-3 text-info ">
+                    <div class="mb-5">
+                    <h4><b>Pedidos:</b></h5>
+                    <label class="form-label"><h5>Plato:</h5></label>
+                    <select id="selP" class="dynamic-select form-select mb-3" name="platillo[]" id="seleccion">
+                        <option class="option" value="" {{ old('platillo') == '' ? 'selected' : '' }}>Selecciona Uno</option>
                         @foreach ($platillos as $platillo)
-                        <option value="{{$platillo->id_menu}}" data-precio="{{$updateOrden->precio_menu}}" {{ $updateOrden->id_menu == $platillo->id_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
+                        <option class="option" value="{{$platillo->id_menu}}" data-precio="{{$platillo->precio_menu}}" {{ old('platillo') == $platillo->id_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
                         @endforeach
                     </select>
-                </div>
-                @error('platillo')
+                    
+                    @error('platillo')
                     <div class="alert alert-danger mt-3">{{ $message }}</div>
                 @enderror
 
                 <div class="mb-3 text-info">
                     <label class="form-label"><b>Cantidad:</b></label>
-                    <input type="number" class="form-control bg-transparent text-white" placeholder="Cantidad"
-                    name="orden_cantidad" id="unidades" value="{{ $updateOrden->orden_cantidad }}">
+                    <input type="number" class="unidades form-control bg-transparent text-white" placeholder="Cantidad"
+                    name="orden_cantidad[]" id="unidadesP" value="{{ old('orden_cantidad[0]') }}">
                 </div>
                 @error('orden_cantidad')
                     <div class="alert alert-danger mt-3">{{ $message }}</div>
                 @enderror
 
-
                 <div class="mb-3 text-info">
                     <label class="form-label bg-transparent"><b>Precio unitario:</b></label>
-                    <div class="form-control bg-transparent text-white" id="precioU">{{$updateOrden->precio_menu}}$</div>
+                    <div class="precioU form-control bg-transparent text-white" id="precioU">0.00$</div>
                 </div>
 
+                
+                </div>
+                <hr class="blanco">
+
+                {{-- <div class="mb-5 rem-0">
+                    <label class="form-label block"><h5>Plato:</h5></label>
+                    <select name="platillo[]" class="border block form-select mb-3 dynamic-select">
+                        <option value="" class="option" data-precio="null">Selecciona Uno</option>
+                        <option value="1" class="option" data-precio="10">Hamburguesa Mixta -&gt; 10$</option>
+                        <option value="2" class="option" data-precio="30">Pizza Margarita -&gt; 30$</option>
+                        <option value="3" class="option" data-precio="15">Ensalada César -&gt; 15$</option>
+                        <option value="4" class="option" data-precio="10">Tacos de Pollo -&gt; 10$</option>
+                        <option value="5" class="option" data-precio="20">Sopa de Lentejas -&gt; 20$</option>
+                    </select>
+                    <div class="text-info mb-3">
+                        <label class="form-label block"><b>Cantidad</b></label>
+                        <input class="unidades form-control bg-transparent text-white" name="orden_cantidad[]" placeholder="Cantidad" type="number"></div>
+                        <div class="text-info mb-3"><label class="form-label block"><b>Precio unitario</b></label>
+                            <div class="precioU form-control bg-transparent text-white">0$</div></div>
+                            <button id="rem-0" type="button" class="removeSelectBtn btn btn-outline-primary remo mb-4">quitar plato</button>
+                            <hr class="blanco">
+                        </div> --}}
+
+                </div>
+                
+                <button type="button" id="addSelectBtn" class="btn btn-outline-primary tuqui mb-4">Agregar Plato</button>
 
                 <div class="mb-3 text-info">
                     <label class="form-label bg-transparent"><b>Total a Pagar:</b></label>
-                    <div class="form-control bg-transparent text-white" id="total"> {{$updateOrden->total_pago}}$</div>
+                    <div class="form-control bg-transparent text-white" id="total">0.00$</div>
                 </div>
 
                 <div class="mb-3 text-info">

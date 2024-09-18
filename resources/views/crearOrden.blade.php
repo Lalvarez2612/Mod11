@@ -39,7 +39,7 @@
                     <div class="mb-5">
                     <h4><b>Pedidos:</b></h5>
                     <label class="form-label"><h5>Plato:</h5></label>
-                    <select class="dynamic-select form-select mb-3" name="platillo[]" id="seleccion">
+                    <select id="selP" class="dynamic-select form-select mb-3" name="platillo[]" id="seleccion">
                         <option class="option" value="" {{ old('platillo') == '' ? 'selected' : '' }}>Selecciona Uno</option>
                         @foreach ($platillos as $platillo)
                         <option class="option" value="{{$platillo->id_menu}}" data-precio="{{$platillo->precio_menu}}" {{ old('platillo') == $platillo->id_menu ? 'selected' : '' }}>{{$platillo->nombre_menu}} -> {{$platillo->precio_menu}}$</option>
@@ -53,7 +53,7 @@
                 <div class="mb-3 text-info">
                     <label class="form-label"><b>Cantidad:</b></label>
                     <input type="number" class="unidades form-control bg-transparent text-white" placeholder="Cantidad"
-                    name="orden_cantidad[]" id="unidades" value="{{ old('orden_cantidad[0]') }}">
+                    name="orden_cantidad[]" id="unidadesP" value="{{ old('orden_cantidad[0]') }}">
                 </div>
                 @error('orden_cantidad')
                     <div class="alert alert-danger mt-3">{{ $message }}</div>
@@ -61,13 +61,10 @@
 
                 <div class="mb-3 text-info">
                     <label class="form-label bg-transparent"><b>Precio unitario:</b></label>
-                    <div class="precioU form-control bg-transparent text-white" id="precioU">0$</div>
+                    <div class="precioU form-control bg-transparent text-white" id="precioU">0.00$</div>
                 </div>
 
-                <div class="mb-3 text-info">
-                    <label class="form-label bg-transparent"><b>Total por plato:</b></label>
-                    <div class="sub-total form-control bg-transparent text-white" id="total">0$</div>
-                </div>
+                
                 </div>
                 <hr class="blanco">
 
@@ -77,7 +74,7 @@
 
                 <div class="mb-3 text-info">
                     <label class="form-label bg-transparent"><b>Total a Pagar:</b></label>
-                    <div class="form-control bg-transparent text-white" id="total">0$</div>
+                    <div class="form-control bg-transparent text-white" id="total">0.00$</div>
                 </div>
 
                 <div class="mb-3 text-info">

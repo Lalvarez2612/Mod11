@@ -198,7 +198,7 @@ class ordenesController
     public function edit($id_orden)
     {
         $updateOrden = Ordene::select("id_orden","cedula","orden_codigo","orden_estatus",
-                                      "nombre_metodo")
+                                      "nombre_metodo",'comentario_adicional')
         ->join("clientes","clientes.id_cliente","=","ordenes.fk_cliente")
         ->join("personas","personas.id_persona","=","clientes.fk_persona")
         ->join("metodos_pagos","metodos_pagos.id_metodoPago","=","ordenes.fk_metodoPago")
@@ -225,8 +225,10 @@ class ordenesController
     {
         $request->validate([
             'cedula' => 'required|numeric|regex:/^[0-9]{2}[0-9]{3}[0-9]{3}$/',
-            'platillo' => 'required|exists:menus,id_menu',
-            'orden_cantidad' => 'required|numeric|min:1',
+            'platillo' => 'required|array',
+            'platillo.*' => 'required|exists:menus,id_menu',
+            'orden_cantidad'=> 'required|array',
+            'orden_cantidad.*' => 'required|numeric|min:1',
             'comentario_adicional' => 'required|string|max:500',
             'metodo_pago' => 'required|in:Transferencia,Pago Móvil',
         ]);
@@ -241,16 +243,15 @@ class ordenesController
 
         if ($idClient != NULL) {
 
+            $platillos = $request->post('platillo');
+            $cantidad=$request->orden_cantidad;
+
             // ENCONTRAR EL OBJETOR Y SUSTITUIR LOS VALORES
             $ordenUpdate = Ordene::find($id_orden);
 
             // CAPTURAR LOS DATOS DEL FORM PARA CREAR UNA NUEVA ORDEN
             $ordenUpdate->fk_cliente = $idClient->id_cliente;
 
-            // CAPTURAR LA fk_menu DEL FORMULARIO
-            
-            
-            $ordenUpdate->fk_menu = $request->post('platillo');
             
             // CAPTURAR EL METODO DE PAGO
 
@@ -264,12 +265,25 @@ class ordenesController
                 $ordenUpdate->fk_metodoPago = $idMetodoPago;
             }
 
-            $ordenUpdate->orden_cantidad = $request->post("orden_cantidad");
+            
             $ordenUpdate->comentario_adicional = $request->post("comentario_adicional");
 
-            $saved=$ordenUpdate->save(); // GENERAMOS EL UPDATE EN LA TABLA "ordenes"
+            $ordenUpdate->save(); // GENERAMOS EL UPDATE EN LA TABLA "ordenes"
 
-            if($saved()){
+            if($ordenUpdate->save()){
+
+                $aux=0;
+                $oXm1=OrdenesHasMenu::where('ordenes_id_orden','=',$id_orden)->delete();
+                foreach ($platillos as $platillo) {
+                    $oXm=new OrdenesHasMenu();
+                    $oXm->ordenes_id_orden=$id_orden;
+                    $oXm->menus_id_menu=$platillo;
+                    $oXm->cantidad=$cantidad[$aux];
+                    $saved= $oXm->save();
+                    if($saved){
+                        $aux++;
+                    }
+                }
                 return redirect()->route('ordenes.index')->with("success", "¡Orden Actualizada con Éxito!");
             }
         } 

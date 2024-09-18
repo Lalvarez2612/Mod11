@@ -54,7 +54,7 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
     // Crear un nuevo div para el nuevo select
 
     let rem='rem-'+aux;
-    console.log(aux)
+    console.log(rem)
     const newDiv = document.createElement('div');
     newDiv.classList.add('mb-5',rem); // Clase para el margen
 
@@ -69,6 +69,7 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
     const newSelect = document.createElement('select');
     newSelect.name = "platillo[]"; // Importante para que se envíe como array
     newSelect.classList.add('border','block', 'form-select', 'mb-3', 'dynamic-select'); // Estilo y clase para referenciarlo
+    newSelect.addEventListener('change', updateTotal);
 
     // Añadir las opciones del select
 
@@ -76,7 +77,8 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
         const opt = document.createElement('option');
         opt.value = option.value;
         opt.textContent = option.text;
-        opt.classList.add('option')
+        opt.classList.add('option');
+        opt.setAttribute('data-precio', option.getAttribute('data-precio'));
         newSelect.appendChild(opt);
     });
 
@@ -100,6 +102,7 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
     newInput.name = 'orden_cantidad[]';
     newInput.placeholder= 'Cantidad'
     newInput.type='number';
+    newInput.addEventListener('input', updateTotal);
 
     newLabel1.appendChild(newB);
     newDiv1.appendChild(newLabel1);
@@ -126,24 +129,6 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
     newDiv2.appendChild(newSubDiv);
     newDiv.appendChild(newDiv2);
 
-    // agregar subtotal
-
-    const newDiv3 = document.createElement('div');
-    newDiv3.classList.add('text-info','mb-3');
-    const newLabel3 = document.createElement('label');
-    newLabel3.classList.add('form-label','block');
-    const newB2 = document.createElement('b');
-    newB2.textContent='Precio por Plato';
-    const newSubDiv1 = document.createElement('div');
-    newSubDiv1.classList.add('precioU', 'form-control','bg-transparent', 'text-white');
-    newSubDiv1.textContent='0$';
-
-    // añadir
-
-    newLabel3.appendChild(newB2);
-    newDiv3.appendChild(newLabel3);
-    newDiv3.appendChild(newSubDiv1);
-    newDiv.appendChild(newDiv3);
 
     // boton
 
@@ -155,6 +140,8 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
         
         if (remover.length > 0) {
         remover[0].remove();
+        updateTotal();
+        updateSelectOptions();
         }
     };
     newboton.classList.add('removeSelectBtn', 'btn', 'btn-outline-primary', 'remo', 'mb-4');
@@ -183,7 +170,34 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
     }
 });
 
+function updateTotal() {
+    let total = 0;
+    const selects = document.querySelectorAll('.dynamic-select');
+    selects.forEach(select => {
+        const selectedOption = select.options[select.selectedIndex];
+        const precio = parseFloat(selectedOption.getAttribute('data-precio')) || 0;
 
+        // Obtener la cantidad correspondiente
+        const inputCantidad = select.parentElement.querySelector('input[name="orden_cantidad[]"]');
+        const cantidad = parseFloat(inputCantidad.value) || 0;
+
+        // Actualizar el subtotal
+        const subtotalDiv = select.parentElement.querySelector('.precioU');
+        const subtotal = precio * cantidad;
+        subtotalDiv.textContent = `${subtotal.toFixed(2)}$`;
+
+        total += subtotal;
+    });
+
+    // Actualizar el total en el div correspondiente
+    const totalDiv = document.getElementById('total');
+    totalDiv.textContent = `${total.toFixed(2)}$`;
+};
+
+sel=document.getElementById('selP');
+sel.addEventListener('change',updateTotal);
+uni=document.getElementById('unidadesP');
+uni.addEventListener('input', updateTotal);
 
 
 // Inicializar el primer select con eventos y lógica
