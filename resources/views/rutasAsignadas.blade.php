@@ -43,7 +43,7 @@
           </div>
         </div>     
       @endif
-      <button class="btn btn-outline-primary mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal_3">Finalizar una Ruta y Registrar la Entrega</button>
+      
 
       {{-- FORMULARIO PARA BUSCAR POR CODIGO O POR FECHA DE ASIGNACION --}}
       <form class="d-flex formBuscar mb-3" action="{{ route("asignacion.findCodigo") }}" method="POST">
@@ -73,6 +73,7 @@
                   <th>Inicio de la Ruta</th>
                   <th>Fin de la Ruta</th>
                   <th>Ver Ruta</th>
+                  <th>Finalizar Ruta</th>
               </tr>
           </thead>
           <tbody class="text-info">
@@ -96,6 +97,13 @@
                       <i class='bx bx-current-location'></i>
                     </a>
                   </td>
+                  @if ($item->tiempo_final == NULL)
+                  <td>
+                    <button id="{{$item->orden_codigo}}" class="btn btn-fin btn-outline-primary mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal_3">END</button>
+                  </td>
+                  @else
+                  <td><b class="text-danger">Ruta finalizada</b></td>
+                  @endif
                 </tr>
               @endforeach
             @else
@@ -118,6 +126,13 @@
                       <i class='bx bx-current-location'></i>
                     </a>
                   </td>
+                  @if ($item->tiempo_final == NULL)
+                  <td>
+                    <button id="{{item->orden_codigo}}" class="btn btn-fin btn-outline-primary mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal_3">END</button>
+                  </td>
+                  @else
+                  <td><b class="text-danger">Ruta finalizada</b></td>
+                  @endif
                 </tr>
               @endforeach
             @endif

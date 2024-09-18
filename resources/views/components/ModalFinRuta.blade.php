@@ -4,7 +4,7 @@
     <div class="modal-dialog">
         <div class="modal-content text-info modalRuta">
             <div class="modal-header div1Modal">
-                <h5>Ingrese el Dato Solicitado</h5>
+                <h4 class="text-danger"><b>Está seguro de entregar esta orden?</b></h3>
                 <button class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -17,7 +17,7 @@
 
                 <div class="mb-3 text-start text-info">
                     <label class="form-label"><b>Código de la Orden</b></label>
-                    <input type="text" class="form-control bg-transparent text-white"
+                    <input id="codigo" type="text" class="form-control bg-transparent text-white"
                     name="tiempo_final" placeholder="O-0000" value="{{ old('tiempo_final') }}">
                 </div>
 

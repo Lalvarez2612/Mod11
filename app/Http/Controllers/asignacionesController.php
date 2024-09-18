@@ -147,7 +147,7 @@ class asignacionesController
         $codigo = $request->post("tiempo_final");
 
         // CAPTURAMOS EL ID DE LA ORDEN Y DE LA TABLA PUENTE "asignaciones_x_ordenes" MEDIANTE EL CODIGO
-
+ 
         $IdsOrdens = Ordene::select("id_orden","id_asignacionOrden")
         ->join("asignaciones_x_ordenes","asignaciones_x_ordenes.fk_orden","=","ordenes.id_orden")
         ->where("orden_codigo",'=',$codigo)
