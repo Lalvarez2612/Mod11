@@ -118,6 +118,20 @@ color: white;
 .formCrearOrden #total{
     border: 2px solid rgb(7, 20, 143);
 }
+.epa{
+    border: 2px solid rgb(26, 199, 211);
+    border-radius: 10px;
+    padding: 10px;
+}
+.block{
+    display: block;
+}
+.blanco{
+    border: none; /* Elimina el borde predeterminado */
+            height: 4px; /* Define el grosor de la línea */
+            background-color: rgb(255, 255, 255); /* Un blanco con algo de transparencia */
+            
+}
 
 /* VISTA ASIGNAR ORDEN, ESTILOS DE LA TABLA DE REPARTIDORES */
 

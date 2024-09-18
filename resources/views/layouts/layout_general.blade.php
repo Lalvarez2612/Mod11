@@ -37,5 +37,6 @@
 
     <script src="{{asset("js/calcularPrecioOrden.js")}}"></script>
     <script src="{{asset("js/calcularRuta.js")}}"></script>
+    <script src="{{asset("js/añadirSelects.js")}}"></script>
 
 </html>

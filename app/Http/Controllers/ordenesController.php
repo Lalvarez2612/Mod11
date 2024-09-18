@@ -167,17 +167,17 @@ class ordenesController
             $orden->orden_estatus = "Sin Asignar";
             $orden->fechaCreacion_orden = NOW()->setTimezone('America/Caracas')->format('H:i:s');
 
-            $orden->save(); // GENERAMOS EL INSERT EN LA TABLA "ordenes"
+            $saved=$orden->save(); // GENERAMOS EL INSERT EN LA TABLA "ordenes"
 
-            if($orden->save()){
+            if($saved){
                 $aux=0;
                 foreach ($platillos as $platillo) {
                     $oXm=new OrdenesHasMenu();
                     $oXm->ordenes_id_orden=$orden->id_orden;
                     $oXm->menus_id_menu=$platillo;
                     $oXm->cantidad=$cantidad[$aux];
-                    $oXm->save();
-                    if($oXm->save){
+                    $saved= $oXm->save();
+                    if($saved){
                         $aux++;
                     }
                 }
@@ -267,9 +267,9 @@ class ordenesController
             $ordenUpdate->orden_cantidad = $request->post("orden_cantidad");
             $ordenUpdate->comentario_adicional = $request->post("comentario_adicional");
 
-            $ordenUpdate->save(); // GENERAMOS EL UPDATE EN LA TABLA "ordenes"
+            $saved=$ordenUpdate->save(); // GENERAMOS EL UPDATE EN LA TABLA "ordenes"
 
-            if($ordenUpdate->save()){
+            if($saved()){
                 return redirect()->route('ordenes.index')->with("success", "¡Orden Actualizada con Éxito!");
             }
         } 
