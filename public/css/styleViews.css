@@ -62,6 +62,11 @@ body::-webkit-scrollbar-thumb{
     background-color: rgb(12, 196, 165);
     color: rgb(5, 12, 71);
 }
+.remo{
+    background-color: rgb(235, 15, 15);
+    color: rgb(5, 12, 71);
+    border-color: crimson;
+}
 .formBuscar input{
     border: 2px solid rgb(7, 20, 143);
 }

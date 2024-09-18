@@ -42,7 +42,7 @@ function addSelectEvents(select) {
 let aux=0;
 // JavaScript para agregar más selects dinámicamente
 document.getElementById('addSelectBtn').addEventListener('click', function() {
-    
+
     const todos = document.querySelectorAll('.dynamic-select');
     const options = todos[0].querySelectorAll('.option');
     if (todos.length < options.length-1) {
@@ -52,8 +52,11 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
     const selectContainer = document.getElementById('selectContainer');
 
     // Crear un nuevo div para el nuevo select
+
+    let rem='rem-'+aux;
+    console.log(aux)
     const newDiv = document.createElement('div');
-    newDiv.classList.add('mb-5'); // Clase para el margen
+    newDiv.classList.add('mb-5',rem); // Clase para el margen
 
     //crear label
     const newLabel = document.createElement('label');
@@ -142,10 +145,28 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
     newDiv3.appendChild(newSubDiv1);
     newDiv.appendChild(newDiv3);
 
+    // boton
+
+    newboton=document.createElement('button');
+    newboton.id=rem;
+    newboton.type='button';
+    newboton.onclick= function() {
+        const remover = document.getElementsByClassName(this.id);
+        
+        if (remover.length > 0) {
+        remover[0].remove();
+        }
+    };
+    newboton.classList.add('removeSelectBtn', 'btn', 'btn-outline-primary', 'remo', 'mb-4');
+    newboton.textContent='quitar plato';
+
+    newDiv.appendChild(newboton);
+
     const newHr=document.createElement('hr');
     newHr.classList.add('blanco');
 
     newDiv.appendChild(newHr);
+
 
 
     // Agregar el evento al nuevo select
@@ -153,11 +174,17 @@ document.getElementById('addSelectBtn').addEventListener('click', function() {
 
     // Actualizar las opciones cuando se añade un nuevo select
     updateSelectOptions();
+
+    aux++;
+    console.log(aux)
     }
     else{
         alert('no se pueden agregar mas platos')
     }
 });
+
+
+
 
 // Inicializar el primer select con eventos y lógica
 document.querySelectorAll('.dynamic-select').forEach(select => {

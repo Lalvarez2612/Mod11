@@ -73,7 +73,7 @@
 
                 </div>
                 
-                <button type="button" id="addSelectBtn" class="btn btn-outline-primary tuqui">Agregar Plato</button>
+                <button type="button" id="addSelectBtn" class="btn btn-outline-primary tuqui mb-4">Agregar Plato</button>
 
                 <div class="mb-3 text-info">
                     <label class="form-label bg-transparent"><b>Total a Pagar:</b></label>
